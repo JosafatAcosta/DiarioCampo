@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Diario de Campo · Clínica Comunitaria Ágora · Intervención Comunitaria</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      background: #f0f4f8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 0.75rem;
+      color: #1a2c3e;
+    }
+    
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      overflow: hidden;
+      padding: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+      body { padding: 1.5rem; }
+      .container { padding: 1.8rem; }
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      color: #0f3b5c;
+      margin-bottom: 0.25rem;
+    }
+    
+    .subtitulo {
+      color: #64748b;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .bloque {
+      background: #ffffff;
+      border-radius: 0.875rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+    }
+    
+    .bloque h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f3b5c;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      border-left: 3px solid #0f3b5c;
+      padding-left: 0.6rem;
+    }
+    
+    .bloque h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #475569;
+      margin: 0.75rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .fila {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .campo {
+      flex: 1 1 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .campo-full {
+      flex: 1 1 100%;
+    }
+    
+    label {
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    input, select, textarea {
+      background: #fafbfc;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #0f3b5c;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(15,59,92,0.1);
+    }
+    
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+    
+    /* Sección de códigos mejorada */
+    .codigos-seccion {
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    
+    .codigos-familia {
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .codigos-familia:last-child {
+      border-bottom: none;
+    }
+    
+    .familia-header {
+      background: #f1f5f9;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+    
+    .familia-header:hover {
+      background: #e9eef3;
+    }
+    
+    .familia-titulo {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: #0f3b5c;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .familia-desc {
+      font-size: 0.65rem;
+      color: #64748b;
+      margin-left: 1.5rem;
+    }
+    
+    .familia-toggle {
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+    
+    .codigos-grid {
+      padding: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: white;
+    }
+    
+    .codigos-grid.cerrado {
+      display: none;
+    }
+    
+    .codigo-item {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-width: 130px;
+      flex: 1 0 auto;
+      max-width: 200px;
+    }
+    
+    .codigo-item.activo {
+      background: #0f3b5c;
+      border-color: #0f3b5c;
+      color: white;
+    }
+    
+    .codigo-codigo {
+      font-weight: 700;
+      font-size: 0.7rem;
+      display: block;
+    }
+    
+    .codigo-desc {
+      font-size: 0.6rem;
+      color: #64748b;
+      display: block;
+      margin-top: 0.1rem;
+    }
+    
+    .codigo-item.activo .codigo-desc {
+      color: #cbd5e1;
+    }
+    
+    /* Escala Likert */
+    .escala-likert {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    
+    .likert-item {
+      background: #f8fafc;
+      padding: 0.7rem;
+      border-radius: 0.6rem;
+    }
+    
+    .likert-item label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+      text-transform: none;
+      color: #1e293b;
+    }
+    
+    .likert-opciones {
+      display: flex;
+      gap: 0.25rem;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    
+    .likert-opcion {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .likert-opcion input {
+      display: none;
+    }
+    
+    .likert-opcion label {
+      display: block;
+      padding: 0.5rem 0.25rem;
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin: 0;
+      text-transform: none;
+    }
+    
+    .likert-opcion input:checked + label {
+      background: #0f3b5c;
+      color: white;
+      border-color: #0f3b5c;
+    }
+    
+    /* Gráficas */
+    .graficas-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .grafica-card {
+      flex: 1;
+      min-width: 200px;
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+    }
+    
+    .grafica-card h4 {
+      font-size: 0.7rem;
+      color: #475569;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    canvas {
+      max-height: 180px;
+      width: 100%;
+    }
+    
+    .btn-actualizar-graficas {
+      background: #e2e8f0;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 1rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+    
+    /* Línea de tiempo */
+    .timeline {
+      background: #f8fafc;
+      border-radius: 0.6rem;
+      padding: 0.75rem;
+    }
+    
+    .evento-tiempo {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      align-items: flex-start;
+    }
+    
+    .evento-hora {
+      min-width: 70px;
+    }
+    
+    .evento-hora input {
+      font-size: 0.75rem;
+      padding: 0.4rem;
+    }
+    
+    .evento-desc {
+      flex: 1;
+    }
+    
+    .evento-desc textarea {
+      font-size: 0.75rem;
+      padding: 0.4rem;
+      min-height: 50px;
+    }
+    
+    .btn-agregar {
+      background: #e2e8f0;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 1rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: #334155;
+    }
+    
+    .btn-eliminar {
+      background: #fee2e2;
+      border: none;
+      padding: 0.4rem 0.6rem;
+      border-radius: 1rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: #dc2626;
+    }
+    
+    /* Botones principales */
+    .botones-exportacion {
+      display: flex;
+      gap: 0.75rem;
+      margin: 1rem 0 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn-exportar {
+      flex: 1;
+      background: #0f3b5c;
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 48px;
+    }
+    
+    .btn-exportar:active {
+      transform: scale(0.98);
+    }
+    
+    .btn-txt { background: #2d6a4f; }
+    .btn-guardar { background: #6b21a5; }
+    
+    .alerta {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.75rem;
+      display: none;
+    }
+    
+    .alerta.mostrar { display: block; }
+    
+    .resumen {
+      background: #e0f2fe;
+      border-radius: 0.6rem;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 0.75rem;
+      border-left: 3px solid #0284c7;
+    }
+    
+    .nota {
+      font-size: 0.65rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+    
+    hr {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container" id="diarioCompleto">
+  <h1>🏘️ Clínica Comunitaria Ágora</h1>
+  <div class="subtitulo">Diario de Campo · Intervención Comunitaria · CECUVA / Tramas A.C.</div>
+
+  <div id="alerta" class="alerta"></div>
+  <div id="resumen" class="resumen"></div>
+
+  <!-- A. Identificación -->
+  <div class="bloque">
+    <h2>📌 A. Identificación de la jornada</h2>
+    <div class="fila">
+      <div class="campo"><label>Nº Diario</label><input type="text" id="numDiario" placeholder="DC-001"></div>
+      <div class="campo"><label>Fecha</label><input type="date" id="fecha"></div>
+      <div class="campo"><label>Día de intervención</label><select id="diaIntervencion"><option value="">Seleccionar</option><option>1° encuentro</option><option>2° encuentro</option><option>3° encuentro</option><option>4° o más</option></select></div>
+    </div>
+    <div class="fila">
+      <div class="campo"><label>Operador/a responsable</label><input type="text" id="operadorResp"></div>
+      <div class="campo"><label>Acompañantes</label><input type="text" id="operadoresAcomp"></div>
+    </div>
+    <div class="fila">
+      <div class="campo"><label>Participantes (esperados)</label><input type="number" id="participantesEsperados" placeholder="0" value="0"></div>
+      <div class="campo"><label>Participantes (asistentes)</label><input type="number" id="participantesAsistentes" placeholder="0" value="0"></div>
+      <div class="campo"><label>Nuevos participantes</label><input type="number" id="nuevosParticipantes" placeholder="0" value="0"></div>
+    </div>
+    <div class="campo campo-full"><label>Condiciones del entorno</label><select id="condicionesEntorno"><option value="">Seleccionar</option><option>Óptimas</option><option>Lluvia/calor extremo</option><option>Evento comunitario simultáneo</option><option>Presencia policial/militar</option><option>Conflicto vecinal</option></select></div>
+  </div>
+
+  <!-- B. Línea de tiempo -->
+  <div class="bloque">
+    <h2>⏱️ B. Línea de tiempo de la jornada</h2>
+    <div class="timeline" id="timeline">
+      <div class="evento-tiempo">
+        <div class="evento-hora"><input type="time" class="evento-hora-input" placeholder="Hora"></div>
+        <div class="evento-desc"><textarea rows="1" placeholder="Descripción del evento, actores, observaciones..." class="evento-desc-input"></textarea></div>
+        <button class="btn-eliminar" onclick="eliminarEvento(this)">🗑️</button>
+      </div>
+    </div>
+    <button class="btn-agregar" onclick="agregarEvento()">+ Agregar evento</button>
+    <div class="campo campo-full" style="margin-top:0.75rem;">
+      <label>Incidente crítico del día</label>
+      <textarea id="incidenteCriticoPrincipal" rows="2" placeholder="¿Qué evento marcó la jornada?"></textarea>
+    </div>
+  </div>
+
+  <!-- C. Sistema de códigos (mejorado con descripciones) -->
+  <div class="bloque">
+    <h2>🏷️ C. Sistema de códigos cualitativos</h2>
+    <p style="font-size:0.7rem; color:#64748b; margin-bottom:0.75rem;">Haz clic en los códigos para seleccionarlos. Cada familia se puede desplegar/colapsar.</p>
+    <div id="codigosSeccion" class="codigos-seccion"></div>
+    <div class="campo campo-full" style="margin-top:0.75rem;">
+      <label>Códigos seleccionados hoy</label>
+      <input type="text" id="codigosSeleccionados" readonly placeholder="Haz clic en los códigos">
+    </div>
+  </div>
+
+  <!-- D. Gráficas de tendencias -->
+  <div class="bloque">
+    <h2>📈 D. Gráficas de evaluación</h2>
+    <div class="graficas-container">
+      <div class="grafica-card">
+        <h4>📊 Evaluación Likert (1-5)</h4>
+        <canvas id="graficaLikert" width="300" height="180"></canvas>
+        <button class="btn-actualizar-graficas" id="actualizarGraficas">🔄 Actualizar gráficas</button>
+      </div>
+      <div class="grafica-card">
+        <h4>🏷️ Códigos seleccionados hoy</h4>
+        <canvas id="graficaCodigos" width="300" height="180"></canvas>
+      </div>
+    </div>
+    <div class="fila" style="margin-top:0.75rem;">
+      <div class="campo"><label>Total códigos activos</label><input type="text" id="totalCodigos" readonly placeholder="0"></div>
+      <div class="campo"><label>Familias de código presentes</label><input type="text" id="familiasPresentes" readonly placeholder="--"></div>
+    </div>
+  </div>
+
+  <!-- E. Escala Likert -->
+  <div class="bloque">
+    <h2>📊 E. Evaluación cuantitativa (1=muy bajo, 5=muy alto)</h2>
+    <div class="escala-likert">
+      <div class="likert-item"><label>🔗 Nivel de vínculo con adolescentes</label><div class="likert-opciones" data-target="vinculo"></div></div>
+      <div class="likert-item"><label>🗣️ Participación activa del grupo</label><div class="likert-opciones" data-target="participacion"></div></div>
+      <div class="likert-item"><label>🛡️ Percepción de seguridad en el espacio</label><div class="likert-opciones" data-target="seguridad"></div></div>
+      <div class="likert-item"><label>🎯 Logro de objetivos de la sesión</label><div class="likert-opciones" data-target="objetivos"></div></div>
+      <div class="likert-item"><label>🤝 Trabajo en equipo entre operadores</label><div class="likert-opciones" data-target="equipo"></div></div>
+    </div>
+  </div>
+
+  <!-- F. Registro cualitativo -->
+  <div class="bloque">
+    <h2>📝 F. Registro cualitativo</h2>
+    <div class="campo campo-full"><label>Voces adolescentes (citas textuales)</label><textarea id="voces" rows="2" placeholder='"..." — Nombre (edad aprox.)'></textarea></div>
+    <div class="campo campo-full"><label>Interacción significativa del día</label><textarea id="interaccionSignificativa" rows="2" placeholder="¿Qué conversación o momento fue clave?"></textarea></div>
+    <div class="campo campo-full"><label>Actores externos observados</label><textarea id="actoresExternos" rows="2" placeholder="Quién, qué hizo, cómo afectó"></textarea></div>
+    <div class="campo campo-full"><label>Gatekeepers</label><input type="text" id="gatekeepers" placeholder="Personas/instituciones que controlan el acceso"></div>
+  </div>
+
+  <!-- G. Poder -->
+  <div class="bloque">
+    <h2>⚡ G. Análisis de poder</h2>
+    <div class="campo campo-full"><label>Poder micro (quién habla, decide, interrumpe)</label><textarea id="poderMicro" rows="2"></textarea></div>
+    <div class="campo campo-full"><label>Poder macro (Estado, institución, género)</label><textarea id="poderMacro" rows="2"></textarea></div>
+    <div class="fila">
+      <div class="campo"><label>¿Resistencia adolescente?</label><select id="resistencia"><option value="">Seleccionar</option><option>Sí, explícita</option><option>Sí, implícita</option><option>No</option></select></div>
+      <div class="campo"><label>¿Violencia estructural?</label><select id="violenciaEstructural"><option value="">Seleccionar</option><option>Sí, abierta</option><option>Sí, sutil</option><option>No</option></select></div>
+    </div>
+  </div>
+
+  <!-- H. Autobservación -->
+  <div class="bloque">
+    <h2>🧠 H. Autobservación del equipo</h2>
+    <div class="fila">
+      <div class="campo"><label>Estado emocional (inicio → fin)</label><input type="text" id="emocion"></div>
+      <div class="campo"><label>¿Incomodidad o sesgo?</label><input type="text" id="incomodidad"></div>
+    </div>
+    <div class="campo campo-full"><label>¿Qué cambiaría?</label><input type="text" id="diferente"></div>
+  </div>
+
+  <!-- I. Plan de acción -->
+  <div class="bloque">
+    <h2>📋 I. Plan de acción y seguimiento</h2>
+    <div class="campo campo-full"><label>Acuerdos con la comunidad</label><textarea id="acuerdos" rows="1"></textarea></div>
+    <div class="campo campo-full"><label>Tareas pendientes del equipo</label><textarea id="tareasPendientes" rows="1"></textarea></div>
+    <div class="campo campo-full"><label>Necesidades próxima sesión</label><input type="text" id="necesidadesProxima"></div>
+    <div class="campo campo-full"><label>Preguntas para CECUVA / Tramas</label><textarea id="preguntasEquipo" rows="1"></textarea></div>
+  </div>
+
+  <!-- J. Metadatos -->
+  <div class="bloque">
+    <h2>📊 J. Metadatos para análisis</h2>
+    <div class="fila">
+      <div class="campo"><label>Grupo etario</label><select id="grupoEtario"><option value="">Seleccionar</option><option>10-12 años</option><option>13-15 años</option><option>16-18 años</option><option>Mixto</option></select></div>
+      <div class="campo"><label>Género predominante</label><select id="generoPredominante"><option value="">Seleccionar</option><option>Mayoría mujeres</option><option>Mayoría varones</option><option>Equilibrado</option></select></div>
+      <div class="campo"><label>Tono general</label><select id="tonoJornada"><option value="">Seleccionar</option><option>Entusiasta</option><option>Tranquilo</option><option>Tenso</option><option>Frustrante</option><option>Esperanzador</option></select></div>
+    </div>
+  </div>
+</div>
+
+<div class="botones-exportacion">
+  <button class="btn-exportar btn-txt" id="exportarTXT">📄 Exportar TXT</button>
+  <button class="btn-exportar" id="exportarPDF">📑 Exportar PDF</button>
+  <button class="btn-exportar btn-guardar" id="guardarLocal">💾 Guardar</button>
+  <button class="btn-exportar" id="cargarLocal">📂 Cargar</button>
+</div>
+<p class="nota">✓ Optimizado móvil · ✓ Códigos con descripciones · ✓ Gráficas automáticas · ✓ Guardado local</p>
+
+<script>
+  // ==================== DEFINICIÓN DE CÓDIGOS CON DESCRIPCIONES ====================
+  const CODIGOS_COMPLETOS = [
+    { familia: "🏠 Condiciones del espacio", descripcion: "Características físicas y simbólicas del territorio", 
+      codigos: [
+        { codigo: "ESP-SEG", descripcion: "Espacio seguro · Percepción de protección" },
+        { codigo: "ESP-PAR", descripcion: "Espacio de participación · Favorece el encuentro" },
+        { codigo: "ESP-COM", descripcion: "Construcción comunitaria · Espacio apropiado colectivamente" },
+        { codigo: "ESP-ACC", descripcion: "Acceso bloqueado · Barreras físicas o institucionales" }
+      ] },
+    { familia: "🤝 Procesos vinculares", descripcion: "Relaciones entre operadores y comunidad",
+      codigos: [
+        { codigo: "VIN-OP", descripcion: "Vínculo operador-usuario · Calidad del encuentro" },
+        { codigo: "VIN-CONF", descripcion: "Relaciones de confianza · Apertura y sinceridad" },
+        { codigo: "VIN-DIAL", descripcion: "Facilitación del diálogo · Escucha activa" },
+        { codigo: "VIN-PERM", descripcion: "Permanencia en el espacio · Constancia de asistencia" }
+      ] },
+    { familia: "💪 Agencia adolescente", descripcion: "Capacidad de acción y voz de los jóvenes",
+      codigos: [
+        { codigo: "AGE-PAR", descripcion: "Participación activa · Involucramiento voluntario" },
+        { codigo: "AGE-EXP", descripcion: "Expresión libre · Opiniones sin filtro" },
+        { codigo: "AGE-COMP", descripcion: "Compartir experiencias · Narrativas personales" },
+        { codigo: "AGE-APR", descripcion: "Apropiación simbólica · Sentido de pertenencia" },
+        { codigo: "AGE-VOZ", descripcion: "Voz adolescente espontánea · Iniciativa propia" }
+      ] },
+    { familia: "🔍 Diagnóstico comunitario", descripcion: "Identificación de necesidades y dinámicas",
+      codigos: [
+        { codigo: "DIA-OBS", descripcion: "Observación de dinámicas · Patrones de interacción" },
+        { codigo: "DIA-NEC", descripcion: "Identificación de necesidades · Carencias detectadas" },
+        { codigo: "DIA-DEM", descripcion: "Demandas y preocupaciones · Lo que pide la comunidad" },
+        { codigo: "DIA-INT", descripcion: "Orientación de intervenciones · Guía para acciones" },
+        { codigo: "DIA-FRUS", descripcion: "Demanda no satisfecha · Expectativas incumplidas" }
+      ] },
+    { familia: "🔹 Poder micro", descripcion: "Relaciones de poder cara a cara",
+      codigos: [
+        { codigo: "P-MIC-HAB", descripcion: "Quién habla y quién calla · Distribución de voz" },
+        { codigo: "P-MIC-DEC", descripcion: "Quién decide la actividad · Toma de decisiones" },
+        { codigo: "P-MIC-ESP", descripcion: "Ocupación del espacio · Territorialidad" },
+        { codigo: "P-MIC-INT", descripcion: "Interrupciones y turnos · Control de la palabra" },
+        { codigo: "P-MIC-CUI", descripcion: "Rol de cuidado · Quién contiene emocionalmente" }
+      ] },
+    { familia: "🔸 Poder macro", descripcion: "Estructuras sociales e institucionales",
+      codigos: [
+        { codigo: "P-MAC-EST", descripcion: "Estado presente/ausente · Rol gubernamental" },
+        { codigo: "P-MAC-INS", descripcion: "Institución facilita/obstruye · Burocracia" },
+        { codigo: "P-MAC-GEN", descripcion: "Normas tácitas de género · Roles asignados" },
+        { codigo: "P-MAC-ETA", descripcion: "Normas etarias · Adultocentrismo" },
+        { codigo: "P-MAC-VIO", descripcion: "Violencia estructural · Desigualdad sistémica" },
+        { codigo: "P-MAC-MIL", descripcion: "Militarización del entorno · Presencia armada" }
+      ] },
+    { familia: "⚠️ Emergentes y tensión", descripcion: "Situaciones no previstas",
+      codigos: [
+        { codigo: "EME-TEN", descripcion: "Tensión institucional · Conflictos con autoridades" },
+        { codigo: "EME-RIT", descripcion: "Ritual institucional · Prácticas rutinarias" },
+        { codigo: "EME-GAT", descripcion: "Gatekeepers · Quienes controlan el acceso" },
+        { codigo: "EME-RES", descripcion: "Resistencia adolescente · Oposición al adulto" },
+        { codigo: "EME-CON", descripcion: "Contradicción diseño/realidad · Brechas" }
+      ] }
+  ];
+
+  // Estado de códigos seleccionados
+  let codigosSeleccionados = new Set();
+  let chartLikert, chartCodigos;
+
+  // Generar sección de códigos colapsable
+  function generarSeccionCodigos() {
+    const container = document.getElementById('codigosSeccion');
+    container.innerHTML = '';
+    
+    CODIGOS_COMPLETOS.forEach((familia, idx) => {
+      const familiaDiv = document.createElement('div');
+      familiaDiv.className = 'codigos-familia';
+      
+      const header = document.createElement('div');
+      header.className = 'familia-header';
+      header.innerHTML = `
+        <div class="familia-titulo">
+          <span>${familia.familia}</span>
+          <span class="familia-desc">${familia.descripcion}</span>
+        </div>
+        <span class="familia-toggle">▼</span>
+      `;
+      
+      const grid = document.createElement('div');
+      grid.className = 'codigos-grid';
+      
+      familia.codigos.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'codigo-item';
+        item.dataset.codigo = c.codigo;
+        item.innerHTML = `
+          <span class="codigo-codigo">${c.codigo}</span>
+          <span class="codigo-desc">${c.descripcion}</span>
+        `;
+        item.onclick = () => {
+          if (codigosSeleccionados.has(c.codigo)) {
+            codigosSeleccionados.delete(c.codigo);
+            item.classList.remove('activo');
+          } else {
+            codigosSeleccionados.add(c.codigo);
+            item.classList.add('activo');
+          }
+          actualizarInputCodigos();
+          actualizarGraficasCodigos();
+          actualizarResumen();
+        };
+        grid.appendChild(item);
+      });
+      
+      let abierto = true;
+      header.onclick = () => {
+        abierto = !abierto;
+        grid.classList.toggle('cerrado', !abierto);
+        header.querySelector('.familia-toggle').textContent = abierto ? '▼' : '▶';
+      };
+      
+      familiaDiv.appendChild(header);
+      familiaDiv.appendChild(grid);
+      container.appendChild(familiaDiv);
+    });
+  }
+
+  function actualizarInputCodigos() {
+    const input = document.getElementById('codigosSeleccionados');
+    input.value = Array.from(codigosSeleccionados).join(', ');
+    document.getElementById('totalCodigos').value = codigosSeleccionados.size;
+    
+    // Contar familias presentes
+    const familiasPresentes = new Set();
+    CODIGOS_COMPLETOS.forEach(familia => {
+      familia.codigos.forEach(c => {
+        if (codigosSeleccionados.has(c.codigo)) {
+          familiasPresentes.add(familia.familia);
+        }
+      });
+    });
+    document.getElementById('familiasPresentes').value = Array.from(familiasPresentes).join(' | ') || 'Ninguna';
+  }
+
+  // Generar escalas Likert
+  const escalas = ['vinculo', 'participacion', 'seguridad', 'objetivos', 'equipo'];
+  const nombresEscalas = {
+    vinculo: 'Vínculo', participacion: 'Participación', seguridad: 'Seguridad',
+    objetivos: 'Objetivos', equipo: 'Equipo'
+  };
+
+  escalas.forEach(escala => {
+    const contenedor = document.querySelector(`.likert-opciones[data-target="${escala}"]`);
+    if (contenedor) {
+      for (let i = 1; i <= 5; i++) {
+        const div = document.createElement('div');
+        div.className = 'likert-opcion';
+        const id = `${escala}_${i}`;
+        div.innerHTML = `
+          <input type="radio" name="${escala}" value="${i}" id="${id}">
+          <label for="${id}">${i}</label>
+        `;
+        contenedor.appendChild(div);
+      }
+    }
+  });
+
+  // Función para obtener valores Likert
+  function obtenerValoresLikert() {
+    const valores = {};
+    escalas.forEach(escala => {
+      const seleccionado = document.querySelector(`input[name="${escala}"]:checked`);
+      valores[escala] = seleccionado ? parseInt(seleccionado.value) : 0;
+    });
+    return valores;
+  }
+
+  // Gráfica Likert
+  function actualizarGraficaLikert() {
+    const valores = obtenerValoresLikert();
+    const ctx = document.getElementById('graficaLikert').getContext('2d');
+    if (chartLikert) chartLikert.destroy();
+    chartLikert = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Vínculo', 'Participación', 'Seguridad', 'Objetivos', 'Equipo'],
+        datasets: [{
+          label: 'Puntuación (1-5)',
+          data: [valores.vinculo, valores.participacion, valores.seguridad, valores.objetivos, valores.equipo],
+          backgroundColor: '#0f3b5c',
+          borderRadius: 6,
+          barPercentage: 0.6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: { y: { min: 0, max: 5, stepSize: 1, title: { display: true, text: 'Nivel' } } },
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 9 } } } }
+      }
+    });
+  }
+
+  // Gráfica de códigos (top 6)
+  function actualizarGraficasCodigos() {
+    const ctx = document.getElementById('graficaCodigos').getContext('2d');
+    const familiasCount = {};
+    CODIGOS_COMPLETOS.forEach(familia => {
+      let count = 0;
+      familia.codigos.forEach(c => {
+        if (codigosSeleccionados.has(c.codigo)) count++;
+      });
+      if (count > 0) familiasCount[familia.familia.replace(/[^a-z]/gi, '').substring(0, 15)] = count;
+    });
+    
+    const labels = Object.keys(familiasCount).slice(0, 6);
+    const datos = Object.values(familiasCount).slice(0, 6);
+    
+    if (chartCodigos) chartCodigos.destroy();
+    chartCodigos = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels.length ? labels : ['Sin códigos'],
+        datasets: [{
+          data: labels.length ? datos : [1],
+          backgroundColor: ['#0f3b5c', '#2d6a4f', '#6b21a5', '#b45309', '#dc2626', '#059669'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 9 } } } }
+      }
+    });
+  }
+
+  function actualizarGraficas() {
+    actualizarGraficaLikert();
+    actualizarGraficasCodigos();
+    mostrarAlerta('📊 Gráficas actualizadas', 'success');
+  }
+
+  // Línea de tiempo dinámica
+  window.agregarEvento = function() {
+    const timeline = document.getElementById('timeline');
+    const nuevoEvento = document.createElement('div');
+    nuevoEvento.className = 'evento-tiempo';
+    nuevoEvento.innerHTML = `
+      <div class="evento-hora"><input type="time" class="evento-hora-input"></div>
+      <div class="evento-desc"><textarea rows="1" placeholder="Descripción..." class="evento-desc-input"></textarea></div>
+      <button class="btn-eliminar" onclick="eliminarEvento(this)">🗑️</button>
+    `;
+    timeline.appendChild(nuevoEvento);
+  };
+  
+  window.eliminarEvento = function(btn) {
+    if (document.querySelectorAll('.evento-tiempo').length > 1) {
+      btn.closest('.evento-tiempo').remove();
+    } else {
+      mostrarAlerta('Debe haber al menos un evento', 'warning');
+    }
+  };
+
+  function mostrarAlerta(msg, tipo = 'info') {
+    const alerta = document.getElementById('alerta');
+    alerta.textContent = msg;
+    alerta.className = 'alerta mostrar';
+    setTimeout(() => alerta.classList.remove('mostrar'), 3000);
+  }
+
+  function actualizarResumen() {
+    const asistentes = document.getElementById('participantesAsistentes').value;
+    const tono = document.getElementById('tonoJornada').value;
+    const totalCodigos = codigosSeleccionados.size;
+    const resumenDiv = document.getElementById('resumen');
+    resumenDiv.innerHTML = `📋 <strong>Resumen:</strong> ${asistentes || '0'} participantes | ${totalCodigos} códigos activos | ${tono || 'sin tono'}`;
+  }
+
+  // Recopilar datos para exportación
+  function recopilarDatos() {
+    const eventos = [];
+    document.querySelectorAll('.evento-tiempo').forEach(evento => {
+      const hora = evento.querySelector('.evento-hora-input')?.value || '';
+      const desc = evento.querySelector('.evento-desc-input')?.value || '';
+      if (hora || desc) eventos.push({ hora, desc });
+    });
+    
+    const likert = obtenerValoresLikert();
+    
+    return {
+      numDiario: document.getElementById('numDiario').value,
+      fecha: document.getElementById('fecha').value,
+      diaIntervencion: document.getElementById('diaIntervencion').value,
+      operadorResp: document.getElementById('operadorResp').value,
+      operadoresAcomp: document.getElementById('operadoresAcomp').value,
+      participantesEsperados: document.getElementById('participantesEsperados').value,
+      participantesAsistentes: document.getElementById('participantesAsistentes').value,
+      nuevosParticipantes: document.getElementById('nuevosParticipantes').value,
+      condicionesEntorno: document.getElementById('condicionesEntorno').value,
+      eventos: eventos,
+      incidenteCriticoPrincipal: document.getElementById('incidenteCriticoPrincipal').value,
+      codigos: Array.from(codigosSeleccionados).join(', '),
+      likert: likert,
+      voces: document.getElementById('voces').value,
+      interaccionSignificativa: document.getElementById('interaccionSignificativa').value,
+      actoresExternos: document.getElementById('actoresExternos').value,
+      gatekeepers: document.getElementById('gatekeepers').value,
+      poderMicro: document.getElementById('poderMicro').value,
+      poderMacro: document.getElementById('poderMacro').value,
+      resistencia: document.getElementById('resistencia').value,
+      violenciaEstructural: document.getElementById('violenciaEstructural').value,
+      emocion: document.getElementById('emocion').value,
+      incomodidad: document.getElementById('incomodidad').value,
+      diferente: document.getElementById('diferente').value,
+      acuerdos: document.getElementById('acuerdos').value,
+      tareasPendientes: document.getElementById('tareasPendientes').value,
+      necesidadesProxima: document.getElementById('necesidadesProxima').value,
+      preguntasEquipo: document.getElementById('preguntasEquipo').value,
+      grupoEtario: document.getElementById('grupoEtario').value,
+      generoPredominante: document.getElementById('generoPredominante').value,
+      tonoJornada: document.getElementById('tonoJornada').value
+    };
+  }
+
+  function generarTextoCompleto(datos) {
+    let txt = `========================================\nDIARIO DE CAMPO - INTERVENCIÓN COMUNITARIA\nClínica Comunitaria Ágora\nExportado: ${new Date().toLocaleString('es-MX')}\n========================================\n\n`;
+    txt += `A. IDENTIFICACIÓN\n━━━━━━━━━━━━━━━━━━━━\nNº Diario: ${datos.numDiario || '—'}\nFecha: ${datos.fecha || '—'}\nDía: ${datos.diaIntervencion || '—'}\nOperador/a: ${datos.operadorResp || '—'}\nParticipantes: ${datos.participantesAsistentes || '0'} / ${datos.participantesEsperados || '0'}\nEntorno: ${datos.condicionesEntorno || '—'}\n\n`;
+    txt += `B. LÍNEA DE TIEMPO\n━━━━━━━━━━━━━━━━━━━━\n${datos.eventos.map((e,i)=>`${i+1}. ${e.hora} | ${e.desc}`).join('\n') || '—'}\nIncidente crítico: ${datos.incidenteCriticoPrincipal || '—'}\n\n`;
+    txt += `C. CÓDIGOS\n━━━━━━━━━━━━━━━━━━━━\n${datos.codigos || '—'}\n\n`;
+    txt += `D. EVALUACIÓN (1-5)\n━━━━━━━━━━━━━━━━━━━━\nVínculo: ${datos.likert.vinculo || '—'} | Participación: ${datos.likert.participacion || '—'}\nSeguridad: ${datos.likert.seguridad || '—'} | Objetivos: ${datos.likert.objetivos || '—'} | Equipo: ${datos.likert.equipo || '—'}\n\n`;
+    txt += `E. REGISTRO CUALITATIVO\n━━━━━━━━━━━━━━━━━━━━\nVoces:\n${datos.voces || '—'}\n\nInteracción:\n${datos.interaccionSignificativa || '—'}\nActores externos:\n${datos.actoresExternos || '—'}\nGatekeepers: ${datos.gatekeepers || '—'}\n\n`;
+    txt += `F. PODER\n━━━━━━━━━━━━━━━━━━━━\nMicro: ${datos.poderMicro || '—'}\nMacro: ${datos.poderMacro || '—'}\nResistencia: ${datos.resistencia || '—'} | Violencia: ${datos.violenciaEstructural || '—'}\n\n`;
+    txt += `G. AUTOBSERVACIÓN\n━━━━━━━━━━━━━━━━━━━━\nEmoción: ${datos.emocion || '—'}\nIncomodidad: ${datos.incomodidad || '—'}\nCambiaría: ${datos.diferente || '—'}\n\n`;
+    txt += `H. PLAN DE ACCIÓN\n━━━━━━━━━━━━━━━━━━━━\nAcuerdos: ${datos.acuerdos || '—'}\nTareas: ${datos.tareasPendientes || '—'}\nNecesidades: ${datos.necesidadesProxima || '—'}\n\n`;
+    txt += `I. METADATOS\n━━━━━━━━━━━━━━━━━━━━\nGrupo etario: ${datos.grupoEtario || '—'} | Género: ${datos.generoPredominante || '—'} | Tono: ${datos.tonoJornada || '—'}\n========================================\n`;
+    return txt;
+  }
+
+  // Event listeners
+  document.getElementById('exportarTXT').onclick = () => {
+    const datos = recopilarDatos();
+    const blob = new Blob([generarTextoCompleto(datos)], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Diario_${datos.fecha || 'sin_fecha'}.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    mostrarAlerta('✅ TXT exportado');
+  };
+
+  document.getElementById('exportarPDF').onclick = async () => {
+    const btn = document.getElementById('exportarPDF');
+    btn.textContent = '⏳ Generando...';
+    const datos = recopilarDatos();
+    const txt = generarTextoCompleto(datos);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    pdf.setFont('courier', 'normal');
+    pdf.setFontSize(9);
+    const lineas = txt.split('\n');
+    let y = 15;
+    lineas.forEach(linea => {
+      if (y > 280) { pdf.addPage(); y = 15; }
+      pdf.text(linea, 15, y);
+      y += 5;
+    });
+    pdf.save(`Diario_${datos.fecha || 'sin_fecha'}.pdf`);
+    btn.textContent = '📑 Exportar PDF';
+    mostrarAlerta('✅ PDF exportado');
+  };
+
+  document.getElementById('guardarLocal').onclick = () => {
+    const datos = recopilarDatos();
+    localStorage.setItem('diarioAgora2', JSON.stringify({ ...datos, codigosSeleccionadosList: Array.from(codigosSeleccionados) }));
+    mostrarAlerta('💾 Guardado');
+  };
+
+  document.getElementById('cargarLocal').onclick = () => {
+    const guardado = localStorage.getItem('diarioAgora2');
+    if (!guardado) { mostrarAlerta('No hay borrador', 'warning'); return; }
+    const datos = JSON.parse(guardado);
+    Object.keys(datos).forEach(key => {
+      if (key === 'codigosSeleccionadosList') return;
+      const campo = document.getElementById(key);
+      if (campo && campo.tagName !== 'TEXTAREA' && campo.tagName !== 'INPUT' && campo.tagName !== 'SELECT') return;
+      if (campo && key !== 'eventos' && key !== 'likert') campo.value = datos[key] || '';
+    });
+    if (datos.codigosSeleccionadosList) {
+      codigosSeleccionados.clear();
+      datos.codigosSeleccionadosList.forEach(cod => codigosSeleccionados.add(cod));
+      document.querySelectorAll('.codigo-item').forEach(item => {
+        if (codigosSeleccionados.has(item.dataset.codigo)) item.classList.add('activo');
+        else item.classList.remove('activo');
+      });
+      actualizarInputCodigos();
+      actualizarGraficasCodigos();
+    }
+    actualizarResumen();
+    mostrarAlerta('📂 Cargado');
+  };
+
+  document.getElementById('actualizarGraficas').onclick = () => actualizarGraficas();
+  document.querySelectorAll('input[type="radio"]').forEach(radio => radio.addEventListener('change', () => actualizarGraficaLikert()));
+  document.getElementById('participantesAsistentes').addEventListener('input', actualizarResumen);
+  document.getElementById('tonoJornada').addEventListener('change', actualizarResumen);
+
+  // Inicialización
+  generarSeccionCodigos();
+  actualizarGraficas();
+  actualizarResumen();
+</script>
+</body>
+</html>
