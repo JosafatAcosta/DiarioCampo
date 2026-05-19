@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>Diario de Campo · Clínica Comunitaria Ágora</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f1f5f9;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 850px;
+      width: 100%;
+      background: #fff;
+      border-radius: 1.5rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+      padding: 1.8rem;
+    }
+    h1 {
+      font-size: 1.6rem;
+      color: #0f3b5c;
+      margin-bottom: 0.2rem;
+    }
+    .subtitulo {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .bloque {
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #e2e8f0;
+    }
+    .bloque h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .bloque h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+      margin: 0.6rem 0 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .fila {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 0.6rem;
+    }
+    .campo {
+      flex: 1 1 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .campo-full {
+      flex: 1 1 100%;
+    }
+    label {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #475569;
+    }
+    input,
+    select,
+    textarea {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.6rem;
+      padding: 0.5rem 0.7rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #3b82b6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    }
+    textarea {
+      min-height: 55px;
+    }
+    .codigos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin: 0.4rem 0;
+    }
+    .codigo-btn {
+      background: #fff;
+      border: 1px solid #94a3b8;
+      color: #334155;
+      padding: 0.25rem 0.6rem;
+      border-radius: 1rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+      white-space: nowrap;
+    }
+    .codigo-btn.activo {
+      background: #0f3b5c;
+      color: #fff;
+      border-color: #0f3b5c;
+    }
+    .codigo-btn.familia {
+      background: #e0e7ff;
+      border-color: #6366f1;
+      color: #3730a3;
+      font-weight: 700;
+      cursor: default;
+      pointer-events: none;
+    }
+    .botones-exportacion {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-exportar {
+      flex: 1;
+      background: #0f3b5c;
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      padding: 0.7rem 1.8rem;
+      border-radius: 2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-exportar:hover {
+      background: #1e4a6e;
+      transform: translateY(-1px);
+    }
+    .btn-txt {
+      background: #2d6a4f;
+    }
+    .btn-txt:hover {
+      background: #1b4d3e;
+    }
+    hr {
+      border: 0.5px solid #e2e8f0;
+      margin: 0.8rem 0;
+    }
+    .nota {
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+      text-align: center;
+    }
+    @media print {
+      .botones-exportacion, .btn-exportar, .nota {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="diarioCompleto">
+    <h1>🧰 Clínica Comunitaria Ágora</h1>
+    <div class="subtitulo">Diario de Campo · CECUVA / Tramas A.C. · Análisis cualitativo con sistema de códigos integrado</div>
+
+    <!-- A. Identificación -->
+    <div class="bloque">
+      <h2>📌 A. Datos de identificación</h2>
+      <div class="fila">
+        <div class="campo"><label>Nº Diario</label><input type="text" id="numDiario" placeholder="DC-01"></div>
+        <div class="campo"><label>Fecha</label><input type="date" id="fecha"></div>
+        <div class="campo"><label>Hora inicio / cierre</label><input type="text" id="horas" placeholder="14:00 - 16:00"></div>
+      </div>
+      <div class="fila">
+        <div class="campo"><label>Operador/a responsable</label><input type="text" id="operadorResp"></div>
+        <div class="campo"><label>Acompañantes</label><input type="text" id="operadoresAcomp"></div>
+        <div class="campo"><label>Participantes (esperados / asistentes)</label><input type="text" id="participantes" placeholder="15 / 8"></div>
+      </div>
+      <div class="fila">
+        <div class="campo campo-full"><label>Condiciones del entorno</label><input type="text" id="condicionesEntorno" placeholder="Clima, eventos extraordinarios..."></div>
+      </div>
+    </div>
+
+    <!-- B. Registro de incidentes con TODOS los códigos -->
+    <div class="bloque">
+      <h2>⏱️ B. Registro de incidentes</h2>
+
+      <h3>🏠 Familia 1: Condiciones del espacio</h3>
+      <div class="codigos" data-familia="espacio">
+        <span class="codigo-btn" data-codigo="ESP-SEG">ESP-SEG · Espacio seguro</span>
+        <span class="codigo-btn" data-codigo="ESP-PAR">ESP-PAR · Espacio de participación</span>
+        <span class="codigo-btn" data-codigo="ESP-COM">ESP-COM · Construcción del espacio comunitario</span>
+        <span class="codigo-btn" data-codigo="ESP-ACC">ESP-ACC · Acceso bloqueado</span>
+      </div>
+
+      <h3>🤝 Familia 2: Procesos vinculares</h3>
+      <div class="codigos" data-familia="vinculo">
+        <span class="codigo-btn" data-codigo="VIN-OP">VIN-OP · Vínculo operador-usuario</span>
+        <span class="codigo-btn" data-codigo="VIN-CONF">VIN-CONF · Relaciones de confianza</span>
+        <span class="codigo-btn" data-codigo="VIN-DIAL">VIN-DIAL · Facilitación del diálogo</span>
+        <span class="codigo-btn" data-codigo="VIN-PERM">VIN-PERM · Permanencia en el espacio</span>
+      </div>
+
+      <h3>💪 Familia 3: Agencia adolescente</h3>
+      <div class="codigos" data-familia="agencia">
+        <span class="codigo-btn" data-codigo="AGE-PAR">AGE-PAR · Participación activa</span>
+        <span class="codigo-btn" data-codigo="AGE-EXP">AGE-EXP · Expresión libre</span>
+        <span class="codigo-btn" data-codigo="AGE-COMP">AGE-COMP · Compartir experiencias</span>
+        <span class="codigo-btn" data-codigo="AGE-APR">AGE-APR · Apropiación simbólica</span>
+        <span class="codigo-btn" data-codigo="AGE-VOZ">AGE-VOZ · Voz adolescente espontánea</span>
+      </div>
+
+      <h3>🔍 Familia 4: Diagnóstico comunitario</h3>
+      <div class="codigos" data-familia="diagnostico">
+        <span class="codigo-btn" data-codigo="DIA-OBS">DIA-OBS · Observación de dinámicas</span>
+        <span class="codigo-btn" data-codigo="DIA-NEC">DIA-NEC · Identificación de necesidades</span>
+        <span class="codigo-btn" data-codigo="DIA-DEM">DIA-DEM · Demandas y preocupaciones</span>
+        <span class="codigo-btn" data-codigo="DIA-INT">DIA-INT · Orientación de intervenciones</span>
+        <span class="codigo-btn" data-codigo="DIA-FRUS">DIA-FRUS · Demanda no satisfecha</span>
+      </div>
+
+      <h3>🔹 Familia 5: Poder micro (interaccional)</h3>
+      <div class="codigos" data-familia="poderMicro">
+        <span class="codigo-btn" data-codigo="P-MIC-HAB">P-MIC-HAB · Quién habla y quién calla</span>
+        <span class="codigo-btn" data-codigo="P-MIC-DEC">P-MIC-DEC · Quién decide la actividad</span>
+        <span class="codigo-btn" data-codigo="P-MIC-ESP">P-MIC-ESP · Ocupación del espacio</span>
+        <span class="codigo-btn" data-codigo="P-MIC-INT">P-MIC-INT · Interrupciones y turnos</span>
+        <span class="codigo-btn" data-codigo="P-MIC-CUI">P-MIC-CUI · Rol de cuidado y contención</span>
+      </div>
+
+      <h3>🔸 Familia 6: Poder macro (estructural)</h3>
+      <div class="codigos" data-familia="poderMacro">
+        <span class="codigo-btn" data-codigo="P-MAC-EST">P-MAC-EST · Estado presente/ausente</span>
+        <span class="codigo-btn" data-codigo="P-MAC-INS">P-MAC-INS · Institución facilita/obstruye</span>
+        <span class="codigo-btn" data-codigo="P-MAC-GEN">P-MAC-GEN · Normas tácitas de género</span>
+        <span class="codigo-btn" data-codigo="P-MAC-ETA">P-MAC-ETA · Normas etarias</span>
+        <span class="codigo-btn" data-codigo="P-MAC-VIO">P-MAC-VIO · Violencia estructural</span>
+        <span class="codigo-btn" data-codigo="P-MAC-MIL">P-MAC-MIL · Militarización del entorno</span>
+      </div>
+
+      <h3>⚠️ Familia 7: Emergentes y tensión</h3>
+      <div class="codigos" data-familia="emergentes">
+        <span class="codigo-btn" data-codigo="EME-TEN">EME-TEN · Tensión institucional</span>
+        <span class="codigo-btn" data-codigo="EME-RIT">EME-RIT · Ritual institucional</span>
+        <span class="codigo-btn" data-codigo="EME-GAT">EME-GAT · Gatekeepers (porteros)</span>
+        <span class="codigo-btn" data-codigo="EME-RES">EME-RES · Resistencia adolescente</span>
+        <span class="codigo-btn" data-codigo="EME-CON">EME-CON · Contradicción diseño/realidad</span>
+      </div>
+
+      <div class="campo campo-full" style="margin-top:0.8rem;">
+        <label>Registro de incidentes (hora, descripción, actores, emoción percibida)</label>
+        <textarea id="incidentes" rows="4" placeholder="14:10 | El Ágora se encuentra cerrado, dos chicas se van frustradas | Adolescentes, personal administrativo | Frustración, desconcierto"></textarea>
+      </div>
+      <div class="campo campo-full">
+        <label>Códigos seleccionados para este registro</label>
+        <input type="text" id="codigosIncidentesSeleccionados" readonly placeholder="Haz clic en los códigos de arriba para seleccionarlos">
+      </div>
+    </div>
+
+    <!-- C. Espacio y voces -->
+    <div class="bloque">
+      <h2>🗺️ C. Mapa del espacio y voces</h2>
+      <div class="fila">
+        <div class="campo"><label>Estado del espacio</label>
+          <select id="estadoEspacio"><option value="">Seleccione</option><option>Abierto y habilitado</option><option>Cerrado total</option><option>Cerrado parcial</option><option>Intervenido por externos</option></select>
+        </div>
+        <div class="campo"><label>Ambiente sensorial (ruido, sonidos, iluminación)</label><input type="text" id="ambiente" placeholder="Silencio, murmullo, sirenas..."></div>
+      </div>
+      <div class="campo campo-full"><label>Croquis narrativo del espacio</label><textarea id="croquis" rows="2" placeholder="¿Quién ocupa qué lugar? ¿Puertas abiertas o cerradas? ¿Obstáculos? ¿Presencia de externos?"></textarea></div>
+      <div class="campo campo-full"><label>Voces adolescentes (citas textuales literales)</label><textarea id="voces" rows="2" placeholder='"¿Por qué cierran el Ágora en día del niño?" — Grupo de chicos afuera, 14:15'></textarea></div>
+    </div>
+
+    <!-- D. Actores externos -->
+    <div class="bloque">
+      <h2>🏛️ D. Actores externos e institucionales</h2>
+      <div class="campo campo-full"><label>Actores observados y su efecto</label><textarea id="actoresExternos" rows="2" placeholder="14:20 | Patrulla estatal se estaciona enfrente | Policías | Tensión, curiosidad en adolescentes | Inhibe el acceso"></textarea></div>
+      <div class="campo campo-full"><label>Gatekeepers identificados (personas que controlan el acceso real)</label><input type="text" id="gatekeepers" placeholder="Lic., Don Nacho, Municipio..."></div>
+    </div>
+
+    <!-- E. Interacción significativa -->
+    <div class="bloque">
+      <h2>💬 E. Interacción significativa del día</h2>
+      <div class="fila">
+        <div class="campo"><label>Participantes (seudónimos)</label><input type="text" id="interParticipantes"></div>
+        <div class="campo"><label>Contexto previo</label><input type="text" id="interContexto"></div>
+      </div>
+      <div class="campo campo-full"><label>Diálogo aproximado y lenguaje no verbal</label><textarea id="interDialogo" rows="2"></textarea></div>
+      <div class="campo campo-full"><label>¿Por qué fue significativa? ¿Qué revela del poder o del vínculo?</label><input type="text" id="interSignificativa"></div>
+    </div>
+
+    <!-- F. Poder micro y macro (evidencia) -->
+    <div class="bloque">
+      <h2>⚡ F. Evidencia de relaciones de poder</h2>
+      <div class="fila">
+        <div class="campo"><label>Poder micro (cara a cara): ¿quién habla, decide, interrumpe, consuela, ocupa el centro?</label><textarea id="poderMicro" rows="2" placeholder="La operadora decide la actividad sin consultar. Un chico interrumpe constantemente a sus compañeras."></textarea></div>
+        <div class="campo"><label>Poder macro (estructural): Estado, institución, género, edad, violencia territorial, diseño del espacio</label><textarea id="poderMacro" rows="2" placeholder="Patrullas estatales toman fotos. La Lic. tiene llaves del Ágora. Calles cerradas por policías."></textarea></div>
+      </div>
+      <div class="campo campo-full"><label>Incidente de poder más significativo del día</label><input type="text" id="incidentePoder" placeholder="El espacio cerrado en Día del Niño revela que la institución no prioriza a los adolescentes"></div>
+    </div>
+
+    <!-- G. Autobservación -->
+    <div class="bloque">
+      <h2>🧠 G. Autobservación del operador/a</h2>
+      <div class="fila">
+        <div class="campo"><label>Estado emocional al llegar / al salir</label><input type="text" id="emocion" placeholder="Esperanzada → Frustrada"></div>
+        <div class="campo"><label>¿Incomodidad, miedo o sesgo personal activado?</label><input type="text" id="incomodidad"></div>
+      </div>
+      <div class="campo campo-full"><label>¿Qué haría diferente si pudiera repetir la jornada?</label><input type="text" id="diferente"></div>
+    </div>
+
+    <!-- H. Cierre analítico -->
+    <div class="bloque">
+      <h2>🔎 H. Cierre analítico</h2>
+      <div class="fila">
+        <div class="campo"><label>Avance del vínculo operador-usuario</label>
+          <select id="avanceVinculo"><option value="">Seleccione</option><option>Significativo</option><option>Moderado</option><option>Neutral</option><option>Retroceso</option><option>Imposible por condiciones externas</option></select>
+        </div>
+        <div class="campo"><label>¿Se identificaron nuevas demandas?</label><input type="text" id="nuevasDemandas" placeholder="Que abran el Ágora consistentemente"></div>
+      </div>
+      <div class="campo campo-full"><label>Incidente crítico (contradice o desafía el diseño de la clínica)</label><textarea id="incidenteCritico" rows="1" placeholder="La presencia policial masiva contradice la noción de 'espacio seguro'"></textarea></div>
+      <div class="campo campo-full"><label>Preguntas abiertas para el equipo (CECUVA / Tramas)</label><textarea id="preguntasEquipo" rows="1" placeholder="¿Cómo negociar con la administración del Ágora para garantizar la apertura?"></textarea></div>
+      <div class="campo campo-full"><label>Seguimiento para la próxima sesión</label><input type="text" id="seguimiento" placeholder="Contactar a la Lic. para confirmar disponibilidad del espacio"></div>
+    </div>
+
+    <!-- I. Metadatos para software cualitativo -->
+    <div class="bloque">
+      <h2>📊 I. Metadatos (para ATLAS.ti / MAXQDA)</h2>
+      <div class="fila">
+        <div class="campo"><label>Grupo etario predominante</label><input type="text" id="grupoEtario" placeholder="12-14 / 15-16 / 17-18"></div>
+        <div class="campo"><label>Género predominante</label><input type="text" id="generoPredominante" placeholder="Mayoría mujeres / hombres / mixto"></div>
+        <div class="campo"><label>Tono general de la jornada</label>
+          <select id="tonoJornada"><option value="">Seleccione</option><option>Entusiasta</option><option>Tranquilo</option><option>Tensión leve</option><option>Tensión alta</option><option>Frustrante</option><option>Desolador</option><option>Esperanzador</option></select>
+        </div>
+      </div>
+      <div class="campo campo-full"><label>Códigos del diseño presentes hoy</label><input type="text" id="codigosDiseno" placeholder="ESP-SEG, VIN-CONF, DIA-FRUS..."></div>
+      <div class="campo campo-full"><label>Códigos emergentes nuevos</label><input type="text" id="codigosEmergentes" placeholder="Códigos no previstos que surgieron hoy"></div>
+    </div>
+  </div>
+
+  <div class="botones-exportacion">
+    <button class="btn-exportar btn-txt" id="exportarTXT">📄 Exportar a TXT (datos estructurados)</button>
+    <button class="btn-exportar" id="exportarPDF">📑 Exportar a PDF (formato texto)</button>
+  </div>
+  <p class="nota">Sin backend · Datos seguros en tu navegador · Exportación en texto plano con todos los campos estructurados</p>
+
+  <script>
+    (function() {
+      // Sistema unificado de códigos
+      const inputCodigos = document.getElementById('codigosIncidentesSeleccionados');
+      const codigosSeleccionados = new Set();
+      const todosLosBotones = document.querySelectorAll('.codigo-btn');
+      
+      todosLosBotones.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const codigo = this.dataset.codigo;
+          if (codigosSeleccionados.has(codigo)) {
+            codigosSeleccionados.delete(codigo);
+            this.classList.remove('activo');
+          } else {
+            codigosSeleccionados.add(codigo);
+            this.classList.add('activo');
+          }
+          inputCodigos.value = Array.from(codigosSeleccionados).join(', ');
+        });
+      });
+
+      // Función para recolectar todos los datos del formulario
+      function recopilarDatos() {
+        const campos = {
+          // A. Identificación
+          numDiario: document.getElementById('numDiario').value,
+          fecha: document.getElementById('fecha').value,
+          horas: document.getElementById('horas').value,
+          operadorResp: document.getElementById('operadorResp').value,
+          operadoresAcomp: document.getElementById('operadoresAcomp').value,
+          participantes: document.getElementById('participantes').value,
+          condicionesEntorno: document.getElementById('condicionesEntorno').value,
+          
+          // B. Incidentes
+          incidentes: document.getElementById('incidentes').value,
+          codigosIncidentes: document.getElementById('codigosIncidentesSeleccionados').value,
+          
+          // C. Espacio y voces
+          estadoEspacio: document.getElementById('estadoEspacio').value,
+          ambiente: document.getElementById('ambiente').value,
+          croquis: document.getElementById('croquis').value,
+          voces: document.getElementById('voces').value,
+          
+          // D. Actores externos
+          actoresExternos: document.getElementById('actoresExternos').value,
+          gatekeepers: document.getElementById('gatekeepers').value,
+          
+          // E. Interacción significativa
+          interParticipantes: document.getElementById('interParticipantes').value,
+          interContexto: document.getElementById('interContexto').value,
+          interDialogo: document.getElementById('interDialogo').value,
+          interSignificativa: document.getElementById('interSignificativa').value,
+          
+          // F. Poder
+          poderMicro: document.getElementById('poderMicro').value,
+          poderMacro: document.getElementById('poderMacro').value,
+          incidentePoder: document.getElementById('incidentePoder').value,
+          
+          // G. Autobservación
+          emocion: document.getElementById('emocion').value,
+          incomodidad: document.getElementById('incomodidad').value,
+          diferente: document.getElementById('diferente').value,
+          
+          // H. Cierre analítico
+          avanceVinculo: document.getElementById('avanceVinculo').value,
+          nuevasDemandas: document.getElementById('nuevasDemandas').value,
+          incidenteCritico: document.getElementById('incidenteCritico').value,
+          preguntasEquipo: document.getElementById('preguntasEquipo').value,
+          seguimiento: document.getElementById('seguimiento').value,
+          
+          // I. Metadatos
+          grupoEtario: document.getElementById('grupoEtario').value,
+          generoPredominante: document.getElementById('generoPredominante').value,
+          tonoJornada: document.getElementById('tonoJornada').value,
+          codigosDiseno: document.getElementById('codigosDiseno').value,
+          codigosEmergentes: document.getElementById('codigosEmergentes').value
+        };
+        return campos;
+      }
+
+      // Función para generar texto estructurado
+      function generarTextoEstructurado(datos) {
+        const fechaActual = new Date().toLocaleString('es-MX');
+        
+        let texto = `========================================\n`;
+        texto += `DIARIO DE CAMPO - CLÍNICA COMUNITARIA ÁGORA\n`;
+        texto += `CECUVA / Tramas A.C.\n`;
+        texto += `Exportado: ${fechaActual}\n`;
+        texto += `========================================\n\n`;
+        
+        texto += `A. DATOS DE IDENTIFICACIÓN\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Nº Diario: ${datos.numDiario || '—'}\n`;
+        texto += `Fecha: ${datos.fecha || '—'}\n`;
+        texto += `Hora: ${datos.horas || '—'}\n`;
+        texto += `Operador/a responsable: ${datos.operadorResp || '—'}\n`;
+        texto += `Acompañantes: ${datos.operadoresAcomp || '—'}\n`;
+        texto += `Participantes: ${datos.participantes || '—'}\n`;
+        texto += `Condiciones del entorno: ${datos.condicionesEntorno || '—'}\n\n`;
+        
+        texto += `B. REGISTRO DE INCIDENTES\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Incidentes:\n${datos.incidentes || '—'}\n`;
+        texto += `Códigos seleccionados: ${datos.codigosIncidentes || '—'}\n\n`;
+        
+        texto += `C. MAPA DEL ESPACIO Y VOCES\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Estado del espacio: ${datos.estadoEspacio || '—'}\n`;
+        texto += `Ambiente sensorial: ${datos.ambiente || '—'}\n`;
+        texto += `Croquis narrativo:\n${datos.croquis || '—'}\n`;
+        texto += `Voces adolescentes:\n${datos.voces || '—'}\n\n`;
+        
+        texto += `D. ACTORES EXTERNOS E INSTITUCIONALES\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Actores observados:\n${datos.actoresExternos || '—'}\n`;
+        texto += `Gatekeepers: ${datos.gatekeepers || '—'}\n\n`;
+        
+        texto += `E. INTERACCIÓN SIGNIFICATIVA\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Participantes: ${datos.interParticipantes || '—'}\n`;
+        texto += `Contexto previo: ${datos.interContexto || '—'}\n`;
+        texto += `Diálogo:\n${datos.interDialogo || '—'}\n`;
+        texto += `Significatividad: ${datos.interSignificativa || '—'}\n\n`;
+        
+        texto += `F. EVIDENCIA DE RELACIONES DE PODER\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Poder micro:\n${datos.poderMicro || '—'}\n`;
+        texto += `Poder macro:\n${datos.poderMacro || '—'}\n`;
+        texto += `Incidente de poder: ${datos.incidentePoder || '—'}\n\n`;
+        
+        texto += `G. AUTOOBSERVACIÓN DEL OPERADOR/A\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Estado emocional: ${datos.emocion || '—'}\n`;
+        texto += `Incomodidad/sesgo: ${datos.incomodidad || '—'}\n`;
+        texto += `Qué haría diferente: ${datos.diferente || '—'}\n\n`;
+        
+        texto += `H. CIERRE ANALÍTICO\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Avance del vínculo: ${datos.avanceVinculo || '—'}\n`;
+        texto += `Nuevas demandas: ${datos.nuevasDemandas || '—'}\n`;
+        texto += `Incidente crítico: ${datos.incidenteCritico || '—'}\n`;
+        texto += `Preguntas para el equipo: ${datos.preguntasEquipo || '—'}\n`;
+        texto += `Seguimiento: ${datos.seguimiento || '—'}\n\n`;
+        
+        texto += `I. METADATOS PARA SOFTWARE CUALITATIVO\n`;
+        texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        texto += `Grupo etario: ${datos.grupoEtario || '—'}\n`;
+        texto += `Género predominante: ${datos.generoPredominante || '—'}\n`;
+        texto += `Tono de la jornada: ${datos.tonoJornada || '—'}\n`;
+        texto += `Códigos del diseño: ${datos.codigosDiseno || '—'}\n`;
+        texto += `Códigos emergentes: ${datos.codigosEmergentes || '—'}\n\n`;
+        
+        texto += `========================================\n`;
+        texto += `FIN DEL REGISTRO\n`;
+        texto += `========================================\n`;
+        
+        return texto;
+      }
+
+      // Exportar a TXT
+      document.getElementById('exportarTXT').addEventListener('click', function() {
+        const datos = recopilarDatos();
+        const textoCompleto = generarTextoEstructurado(datos);
+        
+        const blob = new Blob([textoCompleto], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const fechaArchivo = datos.fecha || new Date().toISOString().split('T')[0];
+        a.download = `Diario_Campo_Agora_${fechaArchivo}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+
+      // Exportar a PDF (versión texto)
+      document.getElementById('exportarPDF').addEventListener('click', async function() {
+        const btn = this;
+        btn.textContent = '⏳ Generando PDF...';
+        btn.disabled = true;
+        
+        try {
+          const datos = recopilarDatos();
+          const textoCompleto = generarTextoEstructurado(datos);
+          
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const margin = 15;
+          const maxWidth = pageWidth - (margin * 2);
+          
+          // Configurar fuente monoespaciada para mejor legibilidad
+          pdf.setFont('courier', 'normal');
+          pdf.setFontSize(9);
+          
+          // Dividir texto en líneas
+          const lineas = textoCompleto.split('\n');
+          let y = margin;
+          
+          lineas.forEach(linea => {
+            if (y > 270) { // Nueva página si es necesario
+              pdf.addPage();
+              y = margin;
+            }
+            
+            // Si la línea es muy larga, dividirla
+            const textoLines = pdf.splitTextToSize(linea, maxWidth);
+            textoLines.forEach(txtLine => {
+              if (y > 270) {
+                pdf.addPage();
+                y = margin;
+              }
+              pdf.text(txtLine, margin, y);
+              y += 5;
+            });
+          });
+          
+          const fechaArchivo = datos.fecha || new Date().toISOString().split('T')[0];
+          pdf.save(`Diario_Campo_Agora_${fechaArchivo}.pdf`);
+          
+        } catch (e) {
+          alert('Error al exportar PDF: ' + e.message);
+        } finally {
+          btn.textContent = '📑 Exportar a PDF (formato texto)';
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
