@@ -33,13 +33,9 @@
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-end;
             flex-wrap: wrap;
             gap: 10px;
-        }
-        header .left {
-            display: flex;
-            flex-direction: column;
         }
         h1 {
             font-family: 'Georgia', 'Times New Roman', serif;
@@ -55,12 +51,6 @@
             color: #6b6a64;
             margin-top: 2px;
         }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
         .version {
             font-size: 0.7rem;
             color: #6b6a64;
@@ -69,41 +59,6 @@
             border-radius: 20px;
             border: 1px solid #e2e0da;
             white-space: nowrap;
-        }
-        .btn-instrucciones {
-            background: none;
-            border: 1px solid #c9c7bf;
-            border-radius: 20px;
-            padding: 4px 14px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            cursor: pointer;
-            color: #1c1c1a;
-            background: #faf9f7;
-            transition: background 0.15s;
-            min-height: 32px;
-        }
-        .btn-instrucciones:hover {
-            background: #eceae3;
-        }
-        .instrucciones-panel {
-            background: #faf9f7;
-            border: 1px solid #e2e0da;
-            border-radius: 6px;
-            padding: 14px 18px;
-            margin-bottom: 18px;
-            display: none;
-        }
-        .instrucciones-panel.visible {
-            display: block;
-        }
-        .instrucciones-panel ol {
-            margin-left: 20px;
-            line-height: 1.7;
-            font-size: 0.9rem;
-        }
-        .instrucciones-panel li {
-            margin-bottom: 2px;
         }
         .fieldset {
             border: 1px solid #e2e0da;
@@ -150,6 +105,7 @@
             transition: border 0.15s;
             font-family: inherit;
         }
+        /* Solo para selects conservamos el ícono de flecha nativo pero mejorado */
         select {
             -webkit-appearance: none;
             appearance: none;
@@ -158,9 +114,10 @@
             background-position: right 12px center;
             padding-right: 32px;
         }
+        /* Para radios y checkboxes eliminamos cualquier anulación de apariencia */
         input[type="radio"],
         input[type="checkbox"] {
-            -webkit-appearance: radio;
+            -webkit-appearance: radio; /* restauramos el comportamiento nativo */
             appearance: radio;
             width: 20px;
             height: 20px;
@@ -169,7 +126,7 @@
             margin: 0 4px 0 0;
             cursor: pointer;
             flex-shrink: 0;
-            border: 1px solid #999;
+            border: 1px solid #999; /* para visibilidad en algunos navegadores */
             background: #fff;
         }
         input[type="checkbox"] {
@@ -212,31 +169,17 @@
             color: #33392f;
             margin-left: 4px;
         }
+        .badge-red {
+            background: #f5e0dd;
+            color: #a8524a;
+        }
         .badge-blue {
             background: #dce6ed;
             color: #3f6a8a;
         }
-        .freq-group {
-            display: flex;
-            gap: 6px 12px;
-            flex-wrap: wrap;
-            align-items: center;
-            padding-top: 2px;
-        }
-        .freq-group label {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            font-weight: 400;
-            font-size: 0.8rem;
-            cursor: pointer;
-            min-height: 28px;
-        }
-        .toggle-hint {
-            font-size: 0.75rem;
-            color: #6b6a64;
-            margin-left: 6px;
-            font-weight: 400;
+        .divider {
+            border-top: 1px dashed #d0cec7;
+            margin: 14px 0 10px;
         }
         .actions {
             display: flex;
@@ -291,10 +234,45 @@
         .btn-success:hover {
             background: #2f5f47;
         }
+        .btn-danger {
+            background: #a8524a;
+            border-color: #a8524a;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #8e443d;
+        }
         .btn-group {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+        }
+        .hint {
+            font-size: 0.7rem;
+            color: #6b6a64;
+            margin-top: 4px;
+        }
+        .freq-group {
+            display: flex;
+            gap: 6px 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            padding-top: 2px;
+        }
+        .freq-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-weight: 400;
+            font-size: 0.8rem;
+            cursor: pointer;
+            min-height: 28px;
+        }
+        .toggle-hint {
+            font-size: 0.75rem;
+            color: #6b6a64;
+            margin-left: 6px;
+            font-weight: 400;
         }
         .footer {
             margin-top: 18px;
@@ -304,12 +282,12 @@
             border-top: 1px solid #e2e0da;
             padding-top: 12px;
         }
+        /* Ajustes para móviles */
         @media (max-width: 640px) {
             body { padding: 6px; }
             .container { padding: 12px 10px; }
             .col { flex: 1 0 100%; min-width: 0; }
             header { flex-direction: column; align-items: stretch; gap: 4px; }
-            .header-actions { justify-content: space-between; }
             .actions { flex-direction: column; align-items: stretch; }
             .btn-group { justify-content: center; }
             .btn { width: 100%; justify-content: center; }
@@ -329,29 +307,13 @@
 <body>
 <div class="container">
     <header>
-        <div class="left">
+        <div>
             <h1>Diario de Campo <small>Clínica Comunitaria Ágora · Fase de Sensibilización / Intervención</small></h1>
         </div>
-        <div class="header-actions">
-            <button class="btn-instrucciones" id="toggleInstrucciones">📖 Instrucciones</button>
-            <span class="version">v2.3</span>
-        </div>
+        <div class="version">v2.2 · MML vinculante</div>
     </header>
 
-    <!-- Panel de instrucciones -->
-    <div class="instrucciones-panel" id="panelInstrucciones">
-        <ol>
-            <li><strong>Selecciona el tipo de sesión</strong> (Acercamiento o Intervención) para ajustar los campos automáticamente.</li>
-            <li><strong>Llena todos los campos numéricos</strong> con cifras reales (asistencias, frecuencias, productos).</li>
-            <li><strong>Registra citas textuales</strong> en los campos habilitados; son evidencia cualitativa clave.</li>
-            <li><strong>Redacta el relato del día</strong> y el incidente crítico en la Sección E (máximo 3 líneas).</li>
-            <li><strong>Exporta CSV o XML</strong> al final de cada jornada; consolida los datos semanalmente.</li>
-            <li><strong>Sé riguroso</strong>: los datos alimentan los indicadores del Marco Lógico y justifican el financiamiento.</li>
-        </ol>
-    </div>
-
     <form id="diarioForm">
-        <!-- (El resto del formulario es idéntico a la versión anterior) -->
         <!-- DATOS GENERALES + TIPO DE SESIÓN -->
         <fieldset class="fieldset">
             <legend>Datos Generales y Tipo de Sesión</legend>
@@ -409,6 +371,7 @@
         <!-- SECCIÓN A: COBERTURA (DINÁMICA) -->
         <fieldset class="fieldset" id="seccionA">
             <legend>A. Cobertura y alcance <span id="subtituloA">(Acercamiento y sensibilización)</span></legend>
+            <!-- Bloque para Sensibilización -->
             <div id="bloqueSensibilizacion">
                 <div class="row">
                     <div class="col">
@@ -435,6 +398,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Bloque para Intervención -->
             <div id="bloqueIntervencion" style="display:none;">
                 <div class="row">
                     <div class="col">
@@ -543,6 +507,7 @@
         <!-- SECCIÓN C: INDICADORES DE PROCESO (DINÁMICA) -->
         <fieldset class="fieldset" id="seccionC">
             <legend>C. Indicadores de proceso <span id="subtituloC">(Acercamiento y sensibilización)</span></legend>
+            <!-- Bloque Sensibilización -->
             <div id="bloqueCSensibilizacion">
                 <div class="row">
                     <div class="col">
@@ -599,6 +564,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Bloque Intervención -->
             <div id="bloqueCIntervencion" style="display:none;">
                 <div class="row">
                     <div class="col">
@@ -746,7 +712,7 @@
     </form>
 
     <div class="footer">
-        Diario de campo adaptable · Clínica Comunitaria Ágora · v2.3
+        Diario de campo adaptable · Clínica Comunitaria Ágora · v2.2
     </div>
 </div>
 
@@ -760,15 +726,7 @@
         const yyyy = hoy.getFullYear();
         fechaInput.value = yyyy + '-' + mm + '-' + dd;
 
-        // ---- TOGGLE INSTRUCCIONES ----
-        const toggleBtn = document.getElementById('toggleInstrucciones');
-        const panel = document.getElementById('panelInstrucciones');
-        toggleBtn.addEventListener('click', function() {
-            panel.classList.toggle('visible');
-            toggleBtn.textContent = panel.classList.contains('visible') ? '📖 Ocultar instrucciones' : '📖 Instrucciones';
-        });
-
-        // ---- TOGGLE SESIÓN ----
+        // ---- TOGGLE ENTRE SENSIBILIZACIÓN E INTERVENCIÓN ----
         const tipoSesion = document.getElementById('tipoSesion');
         const bloqueSens = document.getElementById('bloqueSensibilizacion');
         const bloqueInt = document.getElementById('bloqueIntervencion');
@@ -802,7 +760,7 @@
         tipoSesion.addEventListener('change', toggleSesion);
         toggleSesion();
 
-        // ---- CALCULAR RETENCIÓN ----
+        // ---- CALCULAR TASA DE RETENCIÓN ----
         function calcularRetencion() {
             const inscritos = parseInt(document.getElementById('inscritos').value) || 0;
             const asistentes = parseInt(document.getElementById('asistentes').value) || 0;
@@ -812,14 +770,218 @@
         document.getElementById('inscritos').addEventListener('input', calcularRetencion);
         document.getElementById('asistentes').addEventListener('input', calcularRetencion);
 
-        // ---- EXPORTACIONES, LIMPIEZA Y EJEMPLOS (ídem versión anterior) ----
-        // [Se omite por brevedad, pero el código completo incluye todas las funciones]
-        // ... (el script completo es el mismo que en la versión anterior, solo se añadió el toggle de instrucciones)
+        // ---- RECOGER DATOS ----
+        function obtenerDatos() {
+            const tipo = document.getElementById('tipoSesion').value;
+            return {
+                tipoSesion: tipo,
+                fecha: document.getElementById('fecha').value,
+                horaInicio: document.getElementById('horaInicio').value,
+                horaTermino: document.getElementById('horaTermino').value,
+                operador: document.getElementById('operador').value,
+                actividad: document.getElementById('actividad').value,
+                modulo: document.getElementById('modulo').value,
+                contactos: document.getElementById('contactos').value,
+                interesados: document.getElementById('interesados').value,
+                barreras: document.getElementById('barreras').value,
+                materialEntregado: document.getElementById('materialEntregado').value,
+                obsAcercamiento: document.getElementById('obsAcercamiento').value,
+                inscritos: document.getElementById('inscritos').value,
+                asistentes: document.getElementById('asistentes').value,
+                nuevos: document.getElementById('nuevos').value,
+                reincidentes: document.getElementById('reincidentes').value,
+                tasaRetencion: document.getElementById('tasaRetencion').value,
+                productos: document.getElementById('productos').value,
+                cantidadProductos: document.getElementById('cantidadProductos').value,
+                calidadProductos: document.getElementById('calidadProductos').value,
+                tipoProducto: document.getElementById('tipoProducto').value,
+                espacio: document.querySelector('input[name="espacio"]:checked')?.value || '',
+                materiales: document.getElementById('materiales').value,
+                interferencia: document.querySelector('input[name="interferencia"]:checked')?.value || '',
+                seguridad: document.querySelector('input[name="seguridad"]:checked')?.value || '',
+                observacionEspacio: document.getElementById('observacionEspacio').value,
+                escalaTension: document.getElementById('escalaTension').value,
+                freq_dialogo: document.querySelector('input[name="freq_dialogo"]:checked')?.value || '',
+                freq_curiosidad: document.querySelector('input[name="freq_curiosidad"]:checked')?.value || '',
+                freq_barreras: document.querySelector('input[name="freq_barreras"]:checked')?.value || '',
+                citaBarreras: document.getElementById('citaBarreras').value,
+                freq_interes: document.querySelector('input[name="freq_interes"]:checked')?.value || '',
+                citaInteres: document.getElementById('citaInteres').value,
+                climaEmocionalSens: document.getElementById('climaEmocionalSens').value,
+                freq_develamiento: document.querySelector('input[name="freq_develamiento"]:checked')?.value || '',
+                citaDevelamiento: document.getElementById('citaDevelamiento').value,
+                freq_desnaturalizacion: document.querySelector('input[name="freq_desnaturalizacion"]:checked')?.value || '',
+                citaDesnaturalizacion: document.getElementById('citaDesnaturalizacion').value,
+                freq_agencia: document.querySelector('input[name="freq_agencia"]:checked')?.value || '',
+                citaAgencia: document.getElementById('citaAgencia').value,
+                freq_apoyo: document.querySelector('input[name="freq_apoyo"]:checked')?.value || '',
+                citaApoyo: document.getElementById('citaApoyo').value,
+                freq_conflicto: document.querySelector('input[name="freq_conflicto"]:checked')?.value || '',
+                citaConflicto: document.getElementById('citaConflicto').value,
+                climaEmocionalInt: document.getElementById('climaEmocionalInt').value,
+                padresAsistentes: document.getElementById('padresAsistentes').value,
+                tematicaPadres: document.getElementById('tematicaPadres').value,
+                cambioPadres: document.querySelector('input[name="cambioPadres"]:checked')?.value || '',
+                citaPadres: document.getElementById('citaPadres').value,
+                relatoDia: document.getElementById('relatoDia').value,
+                incidenteCritico: document.getElementById('incidenteCritico').value,
+                cumplimiento: document.getElementById('cumplimiento').value,
+                ajuste: document.getElementById('ajuste').value,
+            };
+        }
 
-        // Nota: para ahorrar espacio, aquí irían las mismas funciones de exportación,
-        // limpieza y ejemplos que ya estaban funcionando. Se mantienen intactas.
-        // En la práctica, debes copiar el script completo de la versión anterior.
+        // ---- EXPORTAR CSV ----
+        document.getElementById('exportCSV').addEventListener('click', function() {
+            const data = obtenerDatos();
+            const claves = Object.keys(data);
+            let csv = claves.join(',') + '\n';
+            const valores = claves.map(k => {
+                let val = data[k] || '';
+                if (typeof val === 'string' && (val.includes(',') || val.includes('"') || val.includes('\n'))) {
+                    val = '"' + val.replace(/"/g, '""') + '"';
+                }
+                return val;
+            });
+            csv += valores.join(',') + '\n';
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'diario_campo_' + (data.fecha || 'sinfecha') + '.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+
+        // ---- EXPORTAR XML ----
+        document.getElementById('exportXML').addEventListener('click', function() {
+            const data = obtenerDatos();
+            let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            xml += '<diario>\n';
+            for (const [key, value] of Object.entries(data)) {
+                let val = String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                xml += `  <${key}>${val}</${key}>\n`;
+            }
+            xml += '</diario>';
+            const blob = new Blob([xml], { type: 'application/xml;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'diario_campo_' + (data.fecha || 'sinfecha') + '.xml';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+
+        // ---- LIMPIAR ----
+        document.getElementById('limpiar').addEventListener('click', function() {
+            if (!confirm('¿Seguro que quieres limpiar todos los campos?')) return;
+            const form = document.getElementById('diarioForm');
+            form.querySelectorAll('input, textarea, select').forEach(el => {
+                if (el.type === 'radio' || el.type === 'checkbox') return;
+                if (el.tagName === 'SELECT') { el.selectedIndex = 0; return; }
+                if (el.type === 'number') { el.value = '0'; return; }
+                if (el.type === 'text' || el.tagName === 'TEXTAREA') { el.value = ''; return; }
+                if (el.type === 'date') return;
+                el.value = '';
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(r => {
+                if (r.value === 'si' && r.name === 'espacio') r.checked = true;
+                else if (r.value === 'no' && r.name === 'interferencia') r.checked = true;
+                else if (r.value === 'no' && r.name === 'seguridad') r.checked = true;
+                else if (r.value === 'no' && r.name === 'cambioPadres') r.checked = true;
+                else if (r.value === '0' && (r.name.startsWith('freq_'))) r.checked = true;
+                else r.checked = false;
+            });
+            document.getElementById('materiales').value = 'si';
+            document.getElementById('productos').value = 'no';
+            document.getElementById('calidadProductos').value = 'medio';
+            document.getElementById('climaEmocionalSens').value = '3';
+            document.getElementById('climaEmocionalInt').value = '3';
+            document.getElementById('escalaTension').value = '3';
+            document.getElementById('cumplimiento').value = 'si';
+            document.getElementById('actividad').value = 'acercamiento';
+            document.getElementById('modulo').value = 'sensibilizacion';
+            document.getElementById('tipoSesion').value = 'sensibilizacion';
+            toggleSesion();
+            calcularRetencion();
+            const hoy = new Date();
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const yyyy = hoy.getFullYear();
+            document.getElementById('fecha').value = yyyy + '-' + mm + '-' + dd;
+        });
+
+        // ---- EJEMPLOS ----
+        document.getElementById('rellenarEjemplo').addEventListener('click', function() {
+            document.getElementById('tipoSesion').value = 'sensibilizacion';
+            toggleSesion();
+            document.getElementById('fecha').value = '2026-08-27';
+            document.getElementById('horaInicio').value = '14:00';
+            document.getElementById('horaTermino').value = '16:00';
+            document.getElementById('operador').value = 'Alexia, Osiris';
+            document.getElementById('actividad').value = 'acercamiento';
+            document.getElementById('modulo').value = 'sensibilizacion';
+            document.getElementById('contactos').value = '18';
+            document.getElementById('interesados').value = '7';
+            document.getElementById('barreras').value = 'Falta de tiempo (5), desconfianza (2)';
+            document.getElementById('materialEntregado').value = '12';
+            document.getElementById('obsAcercamiento').value = 'El juego de presentación con Jenga funcionó muy bien. Las personas se mostraron curiosas por el taller de fotografía.';
+            document.getElementById('materiales').value = 'si';
+            document.querySelector('input[name="espacio"][value="si"]').checked = true;
+            document.querySelector('input[name="interferencia"][value="no"]').checked = true;
+            document.querySelector('input[name="seguridad"][value="no"]').checked = true;
+            document.getElementById('observacionEspacio').value = 'Espacio libre, pero algo de ruido.';
+            document.getElementById('escalaTension').value = '2';
+            document.querySelector('input[name="freq_dialogo"][value="4-6"]').checked = true;
+            document.querySelector('input[name="freq_curiosidad"][value="4-6"]').checked = true;
+            document.querySelector('input[name="freq_barreras"][value="1-3"]').checked = true;
+            document.getElementById('citaBarreras').value = '"No sé si mi mamá me deje venir, pero quiero intentarlo"';
+            document.querySelector('input[name="freq_interes"][value="4-6"]').checked = true;
+            document.getElementById('citaInteres').value = '"Me encanta la idea de la exposición de fotos"';
+            document.getElementById('climaEmocionalSens').value = '4';
+            document.getElementById('relatoDia').value = 'Primer acercamiento exitoso. Logramos captar la atención de varias personas que no conocían el proyecto. Se mostraron participativas.';
+            document.getElementById('cumplimiento').value = 'si';
+            document.getElementById('ajuste').value = 'Llevar más material visual para la próxima.';
+        });
+
+        document.getElementById('rellenarEjemploInt').addEventListener('click', function() {
+            document.getElementById('tipoSesion').value = 'intervencion';
+            toggleSesion();
+            document.getElementById('fecha').value = '2026-08-27';
+            document.getElementById('horaInicio').value = '14:00';
+            document.getElementById('horaTermino').value = '16:30';
+            document.getElementById('operador').value = 'Alexia, Montserrat';
+            document.getElementById('actividad').value = 'taller_fotografia';
+            document.getElementById('modulo').value = 'comp2';
+            document.getElementById('inscritos').value = '12';
+            document.getElementById('asistentes').value = '9';
+            document.getElementById('nuevos').value = '2';
+            document.getElementById('reincidentes').value = '7';
+            calcularRetencion();
+            document.getElementById('productos').value = 'si';
+            document.getElementById('cantidadProductos').value = '5';
+            document.getElementById('calidadProductos').value = 'alto';
+            document.getElementById('tipoProducto').value = 'Fotografías impresas, bocetos';
+            document.getElementById('materiales').value = 'si';
+            document.querySelector('input[name="espacio"][value="si"]').checked = true;
+            document.querySelector('input[name="interferencia"][value="no"]').checked = true;
+            document.querySelector('input[name="seguridad"][value="no"]').checked = true;
+            document.getElementById('observacionEspacio').value = 'Espacio disponible, buena luz.';
+            document.getElementById('escalaTension').value = '2';
+            document.querySelector('input[name="freq_develamiento"][value="1-3"]').checked = true;
+            document.getElementById('citaDevelamiento').value = '"Esto es violencia, porque no me dejan ser quien soy"';
+            document.querySelector('input[name="freq_desnaturalizacion"][value="1-3"]').checked = true;
+            document.getElementById('citaDesnaturalizacion').value = '"Ya no creo que sea normal que mi papá me golpee"';
+            document.querySelector('input[name="freq_agencia"][value="4-6"]').checked = true;
+            document.getElementById('citaAgencia').value = '"Voy a buscar una beca para la universidad"';
+            document.querySelector('input[name="freq_apoyo"][value="1-3"]').checked = true;
+            document.getElementById('citaApoyo').value = 'Ayudó a otro con el encuadre.';
+            document.querySelector('input[name="freq_conflicto"][value="0"]').checked = true;
+            document.getElementById('climaEmocionalInt').value = '4';
+            document.getElementById('relatoDia').value = 'Sesión productiva. Mostraron gran interés en la técnica y compartieron historias personales.';
+            document.getElementById('cumplimiento').value = 'si';
+            document.getElementById('ajuste').value = 'Traer más cámaras.';
+        });
+
     })();
 </script>
+
 </body>
 </html>
