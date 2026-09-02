@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Diario de Campo · Clínica Ágora</title>
+    <meta name="description" content="Registro etnográfico de las jornadas del dispositivo de intervención clínico-comunitaria del Ágora, Chalco.">
+    <meta name="theme-color" content="#33392f">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icons/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Diario Ágora">
+    <meta name="format-detection" content="telephone=no">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f2f1ee;
+            color: #1c1c1a;
+            padding: 12px;
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 18px 16px 24px;
+            border: 1px solid #e2e0da;
+            border-radius: 10px;
+        }
+        header {
+            border-bottom: 2px solid #e2e0da;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        h1 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-weight: 500;
+            font-size: 1.6rem;
+            letter-spacing: -0.01em;
+        }
+        h1 small {
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #6b6a64;
+            margin-top: 2px;
+        }
+        .version {
+            font-size: 0.7rem;
+            color: #6b6a64;
+            background: #faf9f7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #e2e0da;
+            white-space: nowrap;
+        }
+        .fieldset {
+            border: 1px solid #e2e0da;
+            border-radius: 6px;
+            padding: 14px 14px 16px;
+            margin-bottom: 18px;
+            background: #faf9f7;
+        }
+        legend {
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0 8px;
+            color: #1c1c1a;
+            background: #faf9f7;
+            border-radius: 4px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+            margin-top: 8px;
+        }
+        .col {
+            flex: 1 0 160px;
+            min-width: 140px;
+        }
+        .col-full {
+            flex: 1 0 100%;
+        }
+        label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #3d3d39;
+            margin-bottom: 2px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 10px;
+            font-size: 0.95rem;
+            border: 1px solid #c9c7bf;
+            border-radius: 4px;
+            background: #ffffff;
+            transition: border 0.15s;
+            font-family: inherit;
+        }
+        /* Solo para selects conservamos el ícono de flecha nativo pero mejorado */
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
+        /* Para radios y checkboxes eliminamos cualquier anulación de apariencia */
+        input[type="radio"],
+        input[type="checkbox"] {
+            -webkit-appearance: radio; /* restauramos el comportamiento nativo */
+            appearance: radio;
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            min-height: 20px;
+            margin: 0 4px 0 0;
+            cursor: pointer;
+            flex-shrink: 0;
+            border: 1px solid #999; /* para visibilidad en algunos navegadores */
+            background: #fff;
+        }
+        input[type="checkbox"] {
+            -webkit-appearance: checkbox;
+            appearance: checkbox;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #33392f;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(51, 57, 47, 0.15);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 56px;
+        }
+        .inline-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 18px;
+            align-items: center;
+            padding-top: 4px;
+        }
+        .inline-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 400;
+            font-size: 0.85rem;
+            margin-right: 2px;
+            min-height: 32px;
+            cursor: pointer;
+        }
+        .badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: #eceae3;
+            color: #33392f;
+            margin-left: 4px;
+        }
+        .badge-red {
+            background: #f5e0dd;
+            color: #a8524a;
+        }
+        .badge-blue {
+            background: #dce6ed;
+            color: #3f6a8a;
+        }
+        .divider {
+            border-top: 1px dashed #d0cec7;
+            margin: 14px 0 10px;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+            border-top: 1px solid #e2e0da;
+            padding-top: 18px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border: 1px solid #c9c7bf;
+            border-radius: 4px;
+            background: #ffffff;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            text-decoration: none;
+            color: #1c1c1a;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-primary {
+            background: #33392f;
+            border-color: #33392f;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #1f231d;
+            border-color: #1f231d;
+        }
+        .btn-outline {
+            background: transparent;
+            border-color: #c9c7bf;
+        }
+        .btn-outline:hover {
+            background: #f0efe9;
+        }
+        .btn-success {
+            background: #3f7a5c;
+            border-color: #3f7a5c;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #2f5f47;
+        }
+        .btn-danger {
+            background: #a8524a;
+            border-color: #a8524a;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #8e443d;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .hint {
+            font-size: 0.7rem;
+            color: #6b6a64;
+            margin-top: 4px;
+        }
+        .freq-group {
+            display: flex;
+            gap: 6px 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            padding-top: 2px;
+        }
+        .freq-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-weight: 400;
+            font-size: 0.8rem;
+            cursor: pointer;
+            min-height: 28px;
+        }
+        .toggle-hint {
+            font-size: 0.75rem;
+            color: #6b6a64;
+            margin-left: 6px;
+            font-weight: 400;
+        }
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 0.65rem;
+            color: #6b6a64;
+            border-top: 1px solid #e2e0da;
+            padding-top: 12px;
+        }
+        /* Ajustes para móviles */
+        @media (max-width: 640px) {
+            body { padding: 6px; }
+            .container { padding: 12px 10px; }
+            .col { flex: 1 0 100%; min-width: 0; }
+            header { flex-direction: column; align-items: stretch; gap: 4px; }
+            .actions { flex-direction: column; align-items: stretch; }
+            .btn-group { justify-content: center; }
+            .btn { width: 100%; justify-content: center; }
+            .inline-group { gap: 4px 12px; }
+            .freq-group { gap: 4px 8px; }
+            .freq-group label { font-size: 0.75rem; }
+            h1 { font-size: 1.3rem; }
+            input[type="radio"], input[type="checkbox"] {
+                width: 22px;
+                height: 22px;
+                min-width: 22px;
+                min-height: 22px;
+            }
+        }
+        /* ---- Capa de aplicación (folio, guardado, registros) ---- */
+        .appbar {
+            display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+            justify-content: space-between; background: #f7f6f2; border: 1px solid #e2e0da;
+            border-radius: 6px; padding: 8px 12px; margin-bottom: 16px; font-size: 0.74rem;
+        }
+        .appbar-g { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+        .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3f7a5c; margin-right: 5px; }
+        .dot.warn { background: #c08a2e; }
+        .pill { background: #eceae3; border-radius: 12px; padding: 2px 10px; font-weight: 600; color: #33392f; }
+        .msg { border-radius: 6px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.8rem; border: 1px solid; display: none; }
+        .msg.show { display: block; }
+        .msg-am { background: #fdf6e3; border-color: #e5d4a1; color: #6b5518; }
+        .msg-ro { background: #fbecea; border-color: #e8c4bf; color: #8e443d; }
+        .msg-az { background: #eef4f8; border-color: #c6d9e6; color: #33566e; }
+        .msg .btn { margin-top: 8px; margin-right: 6px; }
+        .btn-mini { min-height: 32px; padding: 4px 10px; font-size: 0.72rem; }
+        .panel { border: 1px solid #e2e0da; border-radius: 6px; padding: 14px; margin-bottom: 18px; background: #faf9f7; }
+        .panel h3 { font-size: 0.88rem; margin-bottom: 8px; color: #1c1c1a; }
+        table.regs { width: 100%; border-collapse: collapse; font-size: 0.74rem; margin-top: 6px; }
+        table.regs th, table.regs td { border: 1px solid #e2e0da; padding: 6px 8px; text-align: left; }
+        table.regs th { background: #33392f; color: #fff; font-weight: 600; }
+        table.regs tr:nth-child(even) td { background: #f3f2ee; }
+        .oculto { display: none !important; }
+        select[multiple] { height: auto; min-height: 168px; padding: 4px; background-image: none; }
+        select[multiple] option { padding: 8px 6px; border-radius: 3px; }
+        .chip-red { font-size: 0.68rem; font-weight: 600; padding: 3px 9px; border-radius: 12px; }
+        .chip-red.online { background: #e3ecdf; color: #2f5f47; }
+        .chip-red.offline { background: #fdf6e3; color: #6b5518; }
+        #barraInstalar, #barraActualizar { display: none; }
+        #barraInstalar.show, #barraActualizar.show { display: block; }
+        body { padding-bottom: env(safe-area-inset-bottom); }
+        .contador-op { font-size: 0.7rem; color: #3f6a8a; font-weight: 600; margin-top: 4px; }
+        input.faltante { border-color: #a8524a !important; background: #fdf7f6; }
+        #copiaArea { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.7rem; min-height: 130px; }
+        @media (max-width: 640px) {
+            table.regs th:nth-child(3), table.regs td:nth-child(3) { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div>
+            <h1>Diario de Campo <small>Clínica Comunitaria Ágora · Fase de Sensibilización / Intervención</small></h1>
+        </div>
+        <div class="version">v2.4 · MML vinculante</div>
+    </header>
+
+    <!-- Capa de aplicación -->
+    <div class="appbar">
+        <div class="appbar-g">
+            <span><span class="dot" id="dotEstado"></span><span id="txtEstado">Borrador sin cambios</span></span>
+            <span>Folio: <span class="pill" id="folioPill">—</span></span>
+            <span class="chip-red online" id="chipRed">En línea</span>
+        </div>
+        <div class="appbar-g">
+            <span>Diarios guardados: <span class="pill" id="contadorRegs">0</span></span>
+            <button type="button" class="btn btn-mini" id="verRegistros">Ver</button>
+        </div>
+    </div>
+
+    <div class="msg msg-am" id="msgBorrador">
+        <strong>Hay un diario sin terminar</strong> de una sesión anterior (<span id="borradorInfo"></span>).
+        <div>
+            <button type="button" class="btn btn-mini btn-primary" id="recuperarBorrador">Recuperar</button>
+            <button type="button" class="btn btn-mini" id="descartarBorrador">Descartar</button>
+        </div>
+    </div>
+    <div class="msg msg-az" id="msgGeneral"></div>
+
+    <div class="msg msg-az" id="barraInstalar">
+        <strong>Instala el diario en este teléfono.</strong> Se abre como una app, sin buscar la página, y funciona sin señal.
+        <div>
+            <button type="button" class="btn btn-mini btn-primary" id="btnInstalar">Instalar</button>
+            <button type="button" class="btn btn-mini" id="btnInstalarNo">Ahora no</button>
+        </div>
+    </div>
+
+    <div class="msg msg-am" id="barraActualizar">
+        <strong>Hay una versión nueva del diario.</strong> Tus diarios guardados no se pierden al actualizar.
+        <div><button type="button" class="btn btn-mini btn-primary" id="btnActualizar">Actualizar ahora</button></div>
+    </div>
+
+    <div class="panel oculto" id="panelRegistros">
+        <h3>Diarios guardados en este dispositivo</h3>
+        <div id="tablaRegistros"></div>
+        <div class="btn-group" style="margin-top:10px;">
+            <button type="button" class="btn btn-mini btn-success" id="exportTodosCSV">Exportar CSV (todos)</button>
+            <button type="button" class="btn btn-mini" id="exportTodosXML">Exportar XML (todos)</button>
+            <button type="button" class="btn btn-mini" id="exportRespaldo">Respaldo JSON</button>
+            <button type="button" class="btn btn-mini" id="importarBtn">Importar respaldo</button>
+            <button type="button" class="btn btn-mini btn-danger" id="borrarTodos">Borrar todos</button>
+        </div>
+        <input type="file" id="importarArchivo" accept=".json,application/json" class="oculto">
+        <div class="hint">El respaldo permite juntar los diarios de varios operadores sin duplicar: al importar solo entran los folios que falten.</div>
+    </div>
+
+    <form id="diarioForm">
+        <!-- DATOS GENERALES + TIPO DE SESIÓN -->
+        <fieldset class="fieldset">
+            <legend>Datos Generales y Tipo de Sesión</legend>
+            <div class="row">
+                <div class="col">
+                    <label for="folio">Folio <span class="badge">automático</span></label>
+                    <input type="text" id="folio" readonly style="background:#f0efe9;">
+                    <div class="hint">Fecha + iniciales del operador + consecutivo.</div>
+                </div>
+                <div class="col">
+                    <label for="fecha">Fecha <span class="badge">obligatorio</span></label>
+                    <input type="date" id="fecha" required>
+                </div>
+                <div class="col">
+                    <label for="horaInicio">Hora inicio</label>
+                    <input type="time" id="horaInicio">
+                </div>
+                <div class="col">
+                    <label for="horaTermino">Hora término</label>
+                    <input type="time" id="horaTermino">
+                </div>
+                <div class="col">
+                    <label for="operador">Operador que llena el diario <span class="badge">obligatorio</span></label>
+                    <input type="text" id="operador" placeholder="Tu nombre">
+                    <div class="hint">De aquí se toman las iniciales del folio.</div>
+                </div>
+                <div class="col">
+                    <label for="operadoresPresentes">Operadores presentes en la jornada</label>
+                    <select id="operadoresPresentes" multiple size="9">
+                        <option value="Alexia">Alexia</option>
+                        <option value="Aziel">Aziel</option>
+                        <option value="Belen">Belén</option>
+                        <option value="Josafat">Josafat</option>
+                        <option value="Luis">Luis</option>
+                        <option value="Osiris">Osiris</option>
+                        <option value="Mariana">Mariana</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Valeria">Valeria</option>
+                    </select>
+                    <div class="hint">Toque o haga clic para marcar varios. En el celular se marcan tocando cada nombre.</div>
+                    <div class="contador-op" id="contadorOperadores">Ninguno seleccionado</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="tipoSesion">Tipo de sesión <span class="badge badge-blue">define los indicadores</span></label>
+                    <select id="tipoSesion">
+                        <option value="sensibilizacion">🔹 Acercamiento y sensibilización</option>
+                        <option value="intervencion">🔸 Intervención formal (Talleres CV / Foto / Cocina / Padres)</option>
+                    </select>
+                    <span class="toggle-hint" id="tipoHint">(Los campos se ajustarán)</span>
+                </div>
+                <div class="col">
+                    <label for="actividad">Actividad específica</label>
+                    <select id="actividad">
+                        <option value="acercamiento">Acercamiento / Juego</option>
+                        <option value="presentacion">Presentación del proyecto</option>
+                        <option value="taller_cv">Taller CV</option>
+                        <option value="taller_cocina">Taller Cocina</option>
+                        <option value="taller_fotografia">Taller Fotografía</option>
+                        <option value="grupo_padres">Grupo de Padres</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="modulo">Módulo al que pertenece</label>
+                    <select id="modulo">
+                        <option value="sensibilizacion">Acercamiento y sensibilización</option>
+                        <option value="comp1">Componente 1: Empleabilidad</option>
+                        <option value="comp2">Componente 2: Simbolización</option>
+                        <option value="comp3">Componente 3: Familias</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="hint" style="margin:-8px 0 16px; padding:8px 10px; background:#f7f6f2; border:1px solid #e2e0da; border-radius:6px;">
+            <strong>s/r = sin registro.</strong> Ningún campo viene precargado a propósito: dejar algo en «s/r» significa
+            que no se observó, no que haya ocurrido cero veces. Al guardar, el diario avisa qué quedó sin llenar.
+        </div>
+
+        <!-- SECCIÓN A: COBERTURA (DINÁMICA) -->
+        <fieldset class="fieldset" id="seccionA">
+            <legend>A. Cobertura y alcance <span id="subtituloA">(Acercamiento y sensibilización)</span></legend>
+            <!-- Bloque para Sensibilización -->
+            <div id="bloqueSensibilizacion">
+                <div class="row">
+                    <div class="col">
+                        <label for="contactos">Nº de personas con las que se estableció diálogo</label>
+                        <input type="number" id="contactos" min="0" placeholder="—">
+                    </div>
+                    <div class="col">
+                        <label for="interesados">Nº de personas que manifestaron interés en participar</label>
+                        <input type="number" id="interesados" min="0" placeholder="—">
+                    </div>
+                    <div class="col">
+                        <label for="barreras">Barreras manifestadas para participar</label>
+                        <input type="text" id="barreras" placeholder="Ej: falta de tiempo, desconfianza, padres no dejan">
+                    </div>
+                    <div class="col">
+                        <label for="materialEntregado">Material informativo entregado (volantes, dípticos)</label>
+                        <input type="number" id="materialEntregado" min="0" placeholder="—">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-full">
+                        <label>Observaciones sobre el acercamiento (¿qué funcionó? ¿qué no?)</label>
+                        <textarea id="obsAcercamiento" rows="2" placeholder="Ej: El juego de presentación funcionó bien; las personas se mostraron curiosas por la fotografía..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- Bloque para Intervención -->
+            <div id="bloqueIntervencion" style="display:none;">
+                <div class="row">
+                    <div class="col">
+                        <label for="inscritos">Total de participantes inscritos</label>
+                        <input type="number" id="inscritos" min="0" placeholder="—">
+                    </div>
+                    <div class="col">
+                        <label for="asistentes">Asistentes hoy</label>
+                        <input type="number" id="asistentes" min="0" placeholder="—">
+                    </div>
+                    <div class="col">
+                        <label for="nuevos">Asistentes nuevos (primera vez)</label>
+                        <input type="number" id="nuevos" min="0" placeholder="—">
+                    </div>
+                    <div class="col">
+                        <label for="reincidentes">Reincidentes (vienen de sesiones anteriores)</label>
+                        <input type="number" id="reincidentes" min="0" placeholder="—">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Tasa de retención estimada (calculada)</label>
+                        <input type="text" id="tasaRetencion" readonly style="background:#f0efe9;" value="0%">
+                    </div>
+                    <div class="col">
+                        <label for="productos">¿Se recolectó algún producto físico hoy?</label>
+                        <select id="productos">
+                        <option value="">— sin registro —</option>
+                            <option value="no">No</option>
+                            <option value="si">Sí</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="cantidadProductos">Cantidad de productos</label>
+                        <input type="number" id="cantidadProductos" min="0" placeholder="—">
+                    </div>
+                    <div class="col">
+                        <label for="calidadProductos">Calidad de los productos</label>
+                        <select id="calidadProductos">
+                        <option value="">— sin registro —</option>
+                            <option value="bajo">Bajo</option>
+                            <option value="medio">Medio</option>
+                            <option value="alto">Alto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-full">
+                        <label>Especificar tipo de producto (ej. CV, recetario, fotografía, etc.)</label>
+                        <input type="text" id="tipoProducto" placeholder="Ej: CV, recetario, fotografía impresa...">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- SECCIÓN B: LOGÍSTICA Y RIESGOS -->
+        <fieldset class="fieldset">
+            <legend>B. Logística y gestión de riesgos (vinculado a Supuestos)</legend>
+            <div class="row">
+                <div class="col">
+                    <label>Espacio físico: ¿se usó el espacio planificado?</label>
+                    <div class="inline-group">
+                        <label><input type="radio" name="espacio" value="" checked> s/r</label>
+                        <label><input type="radio" name="espacio" value="si"> Sí</label>
+                        <label><input type="radio" name="espacio" value="no"> No, se improvisó</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Materiales: ¿se contó con los insumos necesarios?</label>
+                    <select id="materiales">
+                        <option value="">— sin registro —</option>
+                        <option value="si">Sí</option>
+                        <option value="parcial">Parcial</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Interferencia institucional: ¿hubo eventos no comunicados?</label>
+                    <div class="inline-group">
+                        <label><input type="radio" name="interferencia" value="" checked> s/r</label>
+                        <label><input type="radio" name="interferencia" value="si"> Sí</label>
+                        <label><input type="radio" name="interferencia" value="no"> No</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Seguridad: ¿se percibió hostilidad o riesgo?</label>
+                    <div class="inline-group">
+                        <label><input type="radio" name="seguridad" value="" checked> s/r</label>
+                        <label><input type="radio" name="seguridad" value="si"> Sí</label>
+                        <label><input type="radio" name="seguridad" value="no"> No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="observacionEspacio">Observación breve (espacio, materiales, interferencia)</label>
+                    <textarea id="observacionEspacio" rows="2" placeholder="Ej: Llovió y nos fuimos a la escalera; no entregaron las llaves..."></textarea>
+                </div>
+                <div class="col">
+                    <label for="escalaTension">Escala de tensión (1 = baja, 5 = alta)</label>
+                    <select id="escalaTension">
+                        <option value="">— sin registro —</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- SECCIÓN C: INDICADORES DE PROCESO (DINÁMICA) -->
+        <fieldset class="fieldset" id="seccionC">
+            <legend>C. Indicadores de proceso <span id="subtituloC">(Acercamiento y sensibilización)</span></legend>
+            <!-- Bloque Sensibilización -->
+            <div id="bloqueCSensibilizacion">
+                <div class="row">
+                    <div class="col">
+                        <label>Disposición al diálogo: ¿Las personas se mostraron abiertas a conversar?</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_dialogo" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_dialogo" value="0"> 0 (Nada)</label>
+                            <label><input type="radio" name="freq_dialogo" value="1-3"> 1-3 (Poco)</label>
+                            <label><input type="radio" name="freq_dialogo" value="4-6"> 4-6 (Moderado)</label>
+                            <label><input type="radio" name="freq_dialogo" value="+6"> +6 (Mucho)</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>Curiosidad por el proyecto: ¿Preguntaron sobre las actividades futuras?</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_curiosidad" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_curiosidad" value="0"> 0</label>
+                            <label><input type="radio" name="freq_curiosidad" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_curiosidad" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_curiosidad" value="+6"> +6</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Barreras de participación: ¿Mencionaron obstáculos (tiempo, permisos, etc.)?</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_barreras" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_barreras" value="0"> 0</label>
+                            <label><input type="radio" name="freq_barreras" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_barreras" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_barreras" value="+6"> +6</label>
+                        </div>
+                        <input type="text" id="citaBarreras" placeholder="Cita textual (opcional)" style="margin-top:6px;">
+                    </div>
+                    <div class="col">
+                        <label>Interés expresado: Frases como "me gustaría", "quiero participar"</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_interes" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_interes" value="0"> 0</label>
+                            <label><input type="radio" name="freq_interes" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_interes" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_interes" value="+6"> +6</label>
+                        </div>
+                        <input type="text" id="citaInteres" placeholder="Cita textual (opcional)" style="margin-top:6px;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-full">
+                        <label for="climaEmocionalSens">Clima emocional general (1 = Muy tenso, 5 = Muy abierto)</label>
+                        <select id="climaEmocionalSens">
+                        <option value="">— sin registro —</option>
+                            <option value="1">1 - Muy tenso</option>
+                            <option value="2">2</option>
+                            <option value="3">3 - Neutral</option>
+                            <option value="4">4</option>
+                            <option value="5">5 - Muy abierto</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Bloque Intervención -->
+            <div id="bloqueCIntervencion" style="display:none;">
+                <div class="row">
+                    <div class="col">
+                        <label>Identificación de violencias (Develamiento)</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_develamiento" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_develamiento" value="0"> 0</label>
+                            <label><input type="radio" name="freq_develamiento" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_develamiento" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_develamiento" value="+6"> +6</label>
+                        </div>
+                        <input type="text" id="citaDevelamiento" placeholder="Cita textual" style="margin-top:6px;">
+                    </div>
+                    <div class="col">
+                        <label>Cuestionamiento de mandatos (Desnaturalización)</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_desnaturalizacion" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_desnaturalizacion" value="0"> 0</label>
+                            <label><input type="radio" name="freq_desnaturalizacion" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_desnaturalizacion" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_desnaturalizacion" value="+6"> +6</label>
+                        </div>
+                        <input type="text" id="citaDesnaturalizacion" placeholder="Cita textual" style="margin-top:6px;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Expresión de Agencia (Subjetivación)</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_agencia" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_agencia" value="0"> 0</label>
+                            <label><input type="radio" name="freq_agencia" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_agencia" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_agencia" value="+6"> +6</label>
+                        </div>
+                        <input type="text" id="citaAgencia" placeholder="Cita textual" style="margin-top:6px;">
+                    </div>
+                    <div class="col">
+                        <label>Conductas de apoyo (Vínculo)</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_apoyo" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_apoyo" value="0"> 0</label>
+                            <label><input type="radio" name="freq_apoyo" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_apoyo" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_apoyo" value="+6"> +6</label>
+                        </div>
+                        <input type="text" id="citaApoyo" placeholder="Cita textual" style="margin-top:6px;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Conflicto manifiesto (Riesgo)</label>
+                        <div class="freq-group">
+                            <label><input type="radio" name="freq_conflicto" value="" checked> s/r</label>
+                            <label><input type="radio" name="freq_conflicto" value="0"> 0</label>
+                            <label><input type="radio" name="freq_conflicto" value="1-3"> 1-3</label>
+                            <label><input type="radio" name="freq_conflicto" value="4-6"> 4-6</label>
+                            <label><input type="radio" name="freq_conflicto" value="+6"> +6</label>
+                        </div>
+                        <input type="text" id="citaConflicto" placeholder="Cita textual" style="margin-top:6px;">
+                    </div>
+                    <div class="col">
+                        <label for="climaEmocionalInt">Clima emocional general (1 = Muy tenso, 5 = Muy abierto)</label>
+                        <select id="climaEmocionalInt">
+                        <option value="">— sin registro —</option>
+                            <option value="1">1 - Muy tenso</option>
+                            <option value="2">2</option>
+                            <option value="3">3 - Neutral</option>
+                            <option value="4">4</option>
+                            <option value="5">5 - Muy abierto</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- SECCIÓN D: REGISTRO PARA PADRES -->
+        <fieldset class="fieldset">
+            <legend>D. Registro específico para padres (solo si aplica al Componente 3)</legend>
+            <div class="row">
+                <div class="col">
+                    <label for="padresAsistentes">Nº de padres asistentes</label>
+                    <input type="number" id="padresAsistentes" min="0" placeholder="—">
+                </div>
+                <div class="col">
+                    <label for="tematicaPadres">Temática emergente en el grupo de padres</label>
+                    <input type="text" id="tematicaPadres" placeholder="Ej: Dificultades económicas, comunicación...">
+                </div>
+                <div class="col">
+                    <label>¿Se observó algún cambio en la percepción de los padres?</label>
+                    <div class="inline-group">
+                        <label><input type="radio" name="cambioPadres" value="" checked> s/r</label>
+                        <label><input type="radio" name="cambioPadres" value="si"> Sí</label>
+                        <label><input type="radio" name="cambioPadres" value="no"> No</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="citaPadres">Cita textual (opcional)</label>
+                    <input type="text" id="citaPadres" placeholder="Ej: 'Ahora entiendo que debo escuchar más...'">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- SECCIÓN E: NARRATIVA -->
+        <fieldset class="fieldset">
+            <legend>E. Narrativa y observaciones cualitativas</legend>
+            <div class="row">
+                <div class="col-full">
+                    <label for="relatoDia">Relato del día (contexto, dinámica general, cómo se sintió el grupo)</label>
+                    <textarea id="relatoDia" rows="3" placeholder="Describa la dinámica general..."></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-full">
+                    <label for="incidenteCritico">Incidente crítico (si aplica)</label>
+                    <textarea id="incidenteCritico" rows="2" placeholder="Evento que rompió la rutina..."></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- SECCIÓN F: CIERRE -->
+        <fieldset class="fieldset">
+            <legend>F. Cierre y sugerencias</legend>
+            <div class="row">
+                <div class="col">
+                    <label>¿Se cumplió el objetivo de la sesión de hoy?</label>
+                    <select id="cumplimiento">
+                        <option value="">— sin registro —</option>
+                        <option value="si">Sí</option>
+                        <option value="parcial">Parcial</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="col-full">
+                    <label for="ajuste">Ajuste necesario para la próxima sesión</label>
+                    <input type="text" id="ajuste" placeholder="Ej: Traer más volantes, cambiar el enfoque del juego...">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- ACCIONES -->
+        <div class="actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="guardarRegistro">💾 Guardar diario</button>
+                <button type="button" class="btn btn-success" id="exportCSV">📥 Exportar CSV</button>
+                <button type="button" class="btn btn-primary" id="exportXML">📥 Exportar XML</button>
+                <button type="button" class="btn btn-outline" id="copiarCSV">📋 Copiar</button>
+                <button type="button" class="btn btn-outline" id="limpiar">🗑️ Limpiar</button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline" id="rellenarEjemplo">📋 Ejemplo (Acercamiento)</button>
+                <button type="button" class="btn btn-outline" id="rellenarEjemploInt">📋 Ejemplo (Intervención)</button>
+            </div>
+        </div>
+        <div id="copiaWrap" class="oculto" style="margin-top:14px;">
+            <label for="copiaArea">Copia manual (por si la descarga no funciona en este teléfono)</label>
+            <textarea id="copiaArea" readonly></textarea>
+        </div>
+    </form>
+
+    <div class="footer">
+        Diario de campo adaptable · Clínica Comunitaria Ágora · v2.4 · los datos se guardan en este dispositivo
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ==================================================================
+       DIARIO DE CAMPO · v2.3
+       El formulario es el original del repositorio, sin cambios.
+       Lo que se agrega aquí es la capa de aplicación:
+         · folio automático con las iniciales del operador
+         · autoguardado del borrador y recuperación tras cierre o recarga
+         · lista de diarios guardados en el dispositivo
+         · exportación de uno o de todos, con respaldo e importación
+       ================================================================== */
+
+    var VERSION = '2.4';
+    var K_BORRADOR = 'dc_borrador_v23';
+    var K_REGISTROS = 'dc_registros_v23';
+    var K_OPERADOR = 'dc_operador_v23';
+
+    var $ = function (id) { return document.getElementById(id); };
+    var form = $('diarioForm');
+
+    /* ---------- esquema de datos ----------
+       t: 'input' | 'radio'
+       bloque: 'sens' | 'int' | 'padres' → se exporta vacío cuando no aplica,
+       para que un cero registrado no se confunda con un campo que no
+       correspondía a ese tipo de sesión.                                   */
+    var ESQUEMA = [
+        { k: 'folio' }, { k: 'fecha' }, { k: 'horaInicio' }, { k: 'horaTermino' },
+        { k: 'operador' }, { k: 'operadoresPresentes', t: 'multi' }, { k: 'tipoSesion' }, { k: 'actividad' }, { k: 'modulo' },
+
+        { k: 'contactos', bloque: 'sens' },
+        { k: 'interesados', bloque: 'sens' },
+        { k: 'barreras', bloque: 'sens' },
+        { k: 'materialEntregado', bloque: 'sens' },
+        { k: 'obsAcercamiento', bloque: 'sens' },
+
+        { k: 'inscritos', bloque: 'int' },
+        { k: 'asistentes', bloque: 'int' },
+        { k: 'nuevos', bloque: 'int' },
+        { k: 'reincidentes', bloque: 'int' },
+        { k: 'tasaRetencion', bloque: 'int' },
+        { k: 'productos', bloque: 'int' },
+        { k: 'cantidadProductos', bloque: 'int' },
+        { k: 'calidadProductos', bloque: 'int' },
+        { k: 'tipoProducto', bloque: 'int' },
+
+        { k: 'espacio', t: 'radio' },
+        { k: 'materiales' },
+        { k: 'interferencia', t: 'radio' },
+        { k: 'seguridad', t: 'radio' },
+        { k: 'observacionEspacio' },
+        { k: 'escalaTension' },
+
+        { k: 'freq_dialogo', t: 'radio', bloque: 'sens' },
+        { k: 'freq_curiosidad', t: 'radio', bloque: 'sens' },
+        { k: 'freq_barreras', t: 'radio', bloque: 'sens' },
+        { k: 'citaBarreras', bloque: 'sens' },
+        { k: 'freq_interes', t: 'radio', bloque: 'sens' },
+        { k: 'citaInteres', bloque: 'sens' },
+        { k: 'climaEmocionalSens', bloque: 'sens' },
+
+        { k: 'freq_develamiento', t: 'radio', bloque: 'int' },
+        { k: 'citaDevelamiento', bloque: 'int' },
+        { k: 'freq_desnaturalizacion', t: 'radio', bloque: 'int' },
+        { k: 'citaDesnaturalizacion', bloque: 'int' },
+        { k: 'freq_agencia', t: 'radio', bloque: 'int' },
+        { k: 'citaAgencia', bloque: 'int' },
+        { k: 'freq_apoyo', t: 'radio', bloque: 'int' },
+        { k: 'citaApoyo', bloque: 'int' },
+        { k: 'freq_conflicto', t: 'radio', bloque: 'int' },
+        { k: 'citaConflicto', bloque: 'int' },
+        { k: 'climaEmocionalInt', bloque: 'int' },
+
+        { k: 'padresAsistentes', bloque: 'padres' },
+        { k: 'tematicaPadres', bloque: 'padres' },
+        { k: 'cambioPadres', t: 'radio', bloque: 'padres' },
+        { k: 'citaPadres', bloque: 'padres' },
+
+        { k: 'relatoDia' }, { k: 'incidenteCritico' },
+        { k: 'cumplimiento' }, { k: 'ajuste' }
+    ];
+
+    var META = ['versionInstrumento', 'guardadoEn', 'diaSemana', 'duracionMin', 'nOperadores'];
+    var COLUMNAS = ['folio'].concat(META).concat(
+        ESQUEMA.filter(function (c) { return c.k !== 'folio'; }).map(function (c) { return c.k; })
+    );
+
+    var DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+    function leer(c) {
+        if (c.t === 'multi') {
+            var sel = $(c.k);
+            if (!sel) return '';
+            return Array.prototype.slice.call(sel.selectedOptions).map(function (o) { return o.value; }).join('|');
+        }
+        if (c.t === 'radio') {
+            var r = form.querySelector('input[name="' + c.k + '"]:checked');
+            return r ? r.value : '';
+        }
+        var el = $(c.k);
+        return el ? String(el.value).trim() : '';
+    }
+    function escribir(c, v) {
+        v = (v === undefined || v === null) ? '' : String(v);
+        if (c.t === 'multi') {
+            var sel = $(c.k);
+            if (!sel) return;
+            var vals = v ? v.split('|') : [];
+            Array.prototype.forEach.call(sel.options, function (o) { o.selected = vals.indexOf(o.value) !== -1; });
+            actualizarContadorOperadores();
+            return;
+        }
+        if (c.t === 'radio') {
+            var r = form.querySelector('input[name="' + c.k + '"][value="' + v + '"]');
+            if (r) r.checked = true;
+            else Array.prototype.forEach.call(form.querySelectorAll('input[name="' + c.k + '"]'),
+                function (x) { x.checked = false; });
+            return;
+        }
+        var el = $(c.k);
+        if (el && !el.readOnly) el.value = v;
+    }
+
+    function diaSemana(iso) {
+        if (!iso) return '';
+        var p = iso.split('-');
+        if (p.length !== 3) return '';
+        var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+        return isNaN(d.getTime()) ? '' : DIAS[d.getDay()];
+    }
+    function duracion(a, b) {
+        if (!a || !b) return '';
+        var pa = a.split(':'), pb = b.split(':');
+        var m = (Number(pb[0]) * 60 + Number(pb[1])) - (Number(pa[0]) * 60 + Number(pa[1]));
+        return isNaN(m) ? '' : (m <= 0 ? '' : String(m));
+    }
+
+    function construirRegistro() {
+        var tipo = $('tipoSesion').value;
+        var modulo = $('modulo').value;
+        var r = {
+            versionInstrumento: VERSION,
+            guardadoEn: new Date().toISOString(),
+            diaSemana: diaSemana($('fecha').value),
+            duracionMin: duracion($('horaInicio').value, $('horaTermino').value),
+            nOperadores: String($('operadoresPresentes').selectedOptions.length || '')
+        };
+        ESQUEMA.forEach(function (c) {
+            var aplica = true;
+            if (c.bloque === 'sens') aplica = (tipo === 'sensibilizacion');
+            if (c.bloque === 'int') aplica = (tipo === 'intervencion');
+            if (c.bloque === 'padres') aplica = (modulo === 'comp3');
+            r[c.k] = aplica ? leer(c) : '';
+        });
+        // la retención solo tiene sentido si hubo inscritos
+        var ins = parseInt($('inscritos').value, 10);
+        if (!(ins > 0)) r.tasaRetencion = '';
+        return r;
+    }
+    function aplicarRegistro(r) {
+        ESQUEMA.forEach(function (c) { escribir(c, r[c.k]); });
+        toggleSesion();
+        calcularRetencion();
+        actualizarFolio();
+    }
+
+    function actualizarContadorOperadores() {
+        var sel = $('operadoresPresentes');
+        if (!sel) return;
+        var n = sel.selectedOptions.length;
+        var nombres = Array.prototype.slice.call(sel.selectedOptions).map(function (o) { return o.text; });
+        $('contadorOperadores').textContent = n === 0 ? 'Ninguno seleccionado'
+            : (n + (n === 1 ? ' operador: ' : ' operadores: ') + nombres.join(', '));
+    }
+
+    /* ---------- almacenamiento ---------- */
+    var almacenOk = (function () {
+        try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); return true; }
+        catch (e) { return false; }
+    })();
+    function registros() {
+        if (!almacenOk) return [];
+        try { return JSON.parse(localStorage.getItem(K_REGISTROS) || '[]'); } catch (e) { return []; }
+    }
+    function guardarRegistros(a) {
+        if (!almacenOk) return false;
+        try { localStorage.setItem(K_REGISTROS, JSON.stringify(a)); return true; } catch (e) { return false; }
+    }
+
+    /* ---------- folio con iniciales del operador ---------- */
+    function iniciales(nombre) {
+        var limpio = String(nombre || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        var partes = limpio.split(/[\s,;/]+/).filter(Boolean);
+        if (!partes.length) return 'XX';
+        var ini = partes.slice(0, 3).map(function (p) { return p.charAt(0).toUpperCase(); })
+            .join('').replace(/[^A-Z]/g, '');
+        return ini || 'XX';
+    }
+    function actualizarFolio() {
+        var base = ($('fecha').value || 'sinfecha') + '_' + iniciales($('operador').value);
+        var usados = {};
+        registros().forEach(function (r) { if (r.folio) usados[r.folio] = true; });
+        var n = 1, folio;
+        do { folio = base + '_' + String(n).padStart(2, '0'); n++; } while (usados[folio] && n < 999);
+        $('folio').value = folio;
+        $('folioPill').textContent = folio;
+        return folio;
+    }
+
+    /* ---------- autoguardado ---------- */
+    var temporizador = null, sucio = false;
+    function marcarSucio() {
+        sucio = true;
+        $('txtEstado').textContent = 'Guardando…';
+        $('dotEstado').className = 'dot warn';
+        clearTimeout(temporizador);
+        temporizador = setTimeout(guardarBorrador, 500);
+    }
+    function guardarBorrador() {
+        if (!almacenOk) {
+            $('txtEstado').textContent = 'Sin memoria: exporte al terminar';
+            $('dotEstado').className = 'dot warn';
+            return;
+        }
+        try {
+            localStorage.setItem(K_BORRADOR, JSON.stringify(construirRegistro()));
+            var h = new Date();
+            $('txtEstado').textContent = 'Borrador guardado ' +
+                String(h.getHours()).padStart(2, '0') + ':' + String(h.getMinutes()).padStart(2, '0');
+            $('dotEstado').className = 'dot';
+            sucio = false;
+        } catch (e) {
+            $('txtEstado').textContent = 'No se pudo guardar el borrador';
+            $('dotEstado').className = 'dot warn';
+        }
+    }
+    form.addEventListener('input', marcarSucio);
+    form.addEventListener('change', marcarSucio);
+    window.addEventListener('beforeunload', function () { if (sucio) guardarBorrador(); });
+
+    /* ---------- avisos ---------- */
+    function avisar(texto, clase) {
+        var m = $('msgGeneral');
+        m.className = 'msg show ' + (clase || 'msg-az');
+        m.textContent = texto;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        clearTimeout(avisar._t);
+        avisar._t = setTimeout(function () { m.className = 'msg'; }, 9000);
+    }
+
+    /* ---------- comportamiento original del formulario ---------- */
+    var tipoSesion = $('tipoSesion');
+    function toggleSesion() {
+        var v = tipoSesion.value, sens = v === 'sensibilizacion';
+        $('bloqueSensibilizacion').style.display = sens ? 'block' : 'none';
+        $('bloqueIntervencion').style.display = sens ? 'none' : 'block';
+        $('bloqueCSensibilizacion').style.display = sens ? 'block' : 'none';
+        $('bloqueCIntervencion').style.display = sens ? 'none' : 'block';
+        $('subtituloA').textContent = sens ? '(Acercamiento y sensibilización)' : '(Intervención Formal)';
+        $('subtituloC').textContent = sens ? '(Disposición, Curiosidad y Barreras)' : '(Develamiento, Agencia y Vínculo)';
+        $('tipoHint').textContent = sens
+            ? '(Se enfoca en el acercamiento inicial y la vinculación)'
+            : '(Se enfoca en indicadores de cambio profundo)';
+        if (!sens) calcularRetencion();
+    }
+    tipoSesion.addEventListener('change', toggleSesion);
+
+    function calcularRetencion() {
+        var ins = parseInt($('inscritos').value, 10) || 0;
+        var asi = parseInt($('asistentes').value, 10) || 0;
+        $('tasaRetencion').value = (ins > 0 ? Math.round((asi / ins) * 100) : 0) + '%';
+    }
+    $('operadoresPresentes').addEventListener('change', actualizarContadorOperadores);
+    $('inscritos').addEventListener('input', calcularRetencion);
+    $('asistentes').addEventListener('input', calcularRetencion);
+    ['fecha', 'operador'].forEach(function (id) { $(id).addEventListener('input', actualizarFolio); });
+    $('operador').addEventListener('change', function () {
+        try { localStorage.setItem(K_OPERADOR, this.value); } catch (e) {}
+    });
+
+    /* ---------- validación ---------- */
+    var ETIQUETAS = {
+        espacio: 'uso del espacio planificado', materiales: 'insumos disponibles',
+        interferencia: 'interferencia institucional', seguridad: 'percepción de seguridad',
+        escalaTension: 'escala de tensión', cumplimiento: 'cumplimiento del objetivo',
+        climaEmocionalSens: 'clima emocional', climaEmocionalInt: 'clima emocional',
+        freq_dialogo: 'disposición al diálogo', freq_curiosidad: 'curiosidad por el proyecto',
+        freq_barreras: 'barreras de participación', freq_interes: 'interés expresado',
+        freq_develamiento: 'develamiento', freq_desnaturalizacion: 'desnaturalización',
+        freq_agencia: 'agencia', freq_apoyo: 'conductas de apoyo', freq_conflicto: 'conflicto manifiesto',
+        relatoDia: 'relato del día'
+    };
+
+    function sinRegistrar() {
+        var r = construirRegistro();
+        var base = ['espacio', 'materiales', 'interferencia', 'seguridad', 'escalaTension', 'cumplimiento', 'relatoDia'];
+        var propios = (r.tipoSesion === 'sensibilizacion')
+            ? ['freq_dialogo', 'freq_curiosidad', 'freq_barreras', 'freq_interes', 'climaEmocionalSens']
+            : ['freq_develamiento', 'freq_desnaturalizacion', 'freq_agencia', 'freq_apoyo', 'freq_conflicto', 'climaEmocionalInt'];
+        return base.concat(propios).filter(function (k) { return !r[k]; })
+            .map(function (k) { return ETIQUETAS[k] || k; });
+    }
+
+    function faltantes() {
+        var f = [];
+        $('fecha').classList.remove('faltante');
+        $('operador').classList.remove('faltante');
+        if (!$('fecha').value) { f.push('fecha'); $('fecha').classList.add('faltante'); }
+        if (!$('operador').value.trim()) { f.push('operador responsable'); $('operador').classList.add('faltante'); }
+        return f;
+    }
+
+    /* ---------- guardar diario ---------- */
+    $('guardarRegistro').addEventListener('click', function () {
+        var f = faltantes();
+        if (f.length) {
+            avisar('No se puede guardar sin ' + f.join(' ni ') + '. Sin eso el diario no se puede identificar.', 'msg-ro');
+            return;
+        }
+        var pend = sinRegistrar();
+        if (pend.length && !confirm('Quedan ' + pend.length + ' campos sin registrar:\n\n· ' +
+            pend.join('\n· ') + '\n\nSe guardarán como «sin registro», que no es lo mismo que cero.\n\n¿Guardar así?')) return;
+
+        var folio = actualizarFolio();
+        var r = construirRegistro();
+        r.folio = folio;
+        var arr = registros();
+        arr.push(r);
+        if (!guardarRegistros(arr)) {
+            avisar('No se pudo guardar en este dispositivo. Exporte el diario ahora con «Exportar CSV».', 'msg-ro');
+            return;
+        }
+        try { localStorage.removeItem(K_BORRADOR); } catch (e) {}
+        refrescarRegistros();
+        avisar('Diario ' + folio + ' guardado. Total en este dispositivo: ' + arr.length +
+               '. Recuerde exportar el CSV al final del día.', 'msg-az');
+        limpiarFormulario(true);
+    });
+
+    /* ---------- exportación ---------- */
+    var BOM = '﻿'; // para que Excel lea bien los acentos
+
+    function celda(v) {
+        var t = (v === undefined || v === null) ? '' : String(v);
+        return /[",\n\r;]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+    }
+    function csv(rs) {
+        return BOM + [COLUMNAS.join(',')].concat(rs.map(function (r) {
+            return COLUMNAS.map(function (c) { return celda(r[c]); }).join(',');
+        })).join('\r\n') + '\r\n';
+    }
+    function escXML(v) {
+        return String(v === undefined || v === null ? '' : v)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&apos;')
+            .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+    }
+    function xml(rs) {
+        var x = '<?xml version="1.0" encoding="UTF-8"?>\n<diarios instrumento="v' + VERSION + '" n="' + rs.length + '">\n';
+        rs.forEach(function (r) {
+            x += '  <diario folio="' + escXML(r.folio) + '">\n';
+            COLUMNAS.forEach(function (c) { x += '    <' + c + '>' + escXML(r[c]) + '</' + c + '>\n'; });
+            x += '  </diario>\n';
+        });
+        return x + '</diarios>\n';
+    }
+    function descargar(txt, nombre, mime) {
+        try {
+            var b = new Blob([txt], { type: mime + ';charset=utf-8;' });
+            var u = URL.createObjectURL(b);
+            var a = document.createElement('a');
+            a.href = u; a.download = nombre; a.style.display = 'none';
+            document.body.appendChild(a); a.click();
+            setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(u); }, 1500);
+            return true;
+        } catch (e) { return false; }
+    }
+    function exportarActual(formato) {
+        var f = faltantes();
+        if (f.length) { avisar('No se puede exportar sin ' + f.join(' ni ') + '.', 'msg-ro'); return; }
+        var r = construirRegistro();
+        r.folio = $('folio').value || actualizarFolio();
+        if (formato === 'csv') descargar(csv([r]), 'diario_' + r.folio + '.csv', 'text/csv');
+        else descargar(xml([r]), 'diario_' + r.folio + '.xml', 'application/xml');
+        avisar('Archivo generado con el folio ' + r.folio + '. Si no aparece la descarga, use «Copiar».', 'msg-az');
+    }
+    $('exportCSV').addEventListener('click', function () { exportarActual('csv'); });
+    $('exportXML').addEventListener('click', function () { exportarActual('xml'); });
+
+    $('copiarCSV').addEventListener('click', function () {
+        var r = construirRegistro();
+        r.folio = $('folio').value || actualizarFolio();
+        var t = csv([r]);
+        $('copiaWrap').classList.remove('oculto');
+        $('copiaArea').value = t;
+        $('copiaArea').select();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(t).then(
+                function () { avisar('Contenido copiado. Puede pegarlo en un correo o mensaje.', 'msg-az'); },
+                function () { avisar('Seleccione el texto del recuadro y cópielo manualmente.', 'msg-am'); });
+        } else avisar('Seleccione el texto del recuadro y cópielo manualmente.', 'msg-am');
+    });
+
+    $('exportTodosCSV').addEventListener('click', function () {
+        var a = registros();
+        if (!a.length) { avisar('No hay diarios guardados en este dispositivo.', 'msg-am'); return; }
+        descargar(csv(a), 'diarios_' + (a[0].fecha || 'sinfecha') + '_' + iniciales($('operador').value) +
+            '_n' + a.length + '.csv', 'text/csv');
+    });
+    $('exportTodosXML').addEventListener('click', function () {
+        var a = registros();
+        if (!a.length) { avisar('No hay diarios guardados en este dispositivo.', 'msg-am'); return; }
+        descargar(xml(a), 'diarios_' + (a[0].fecha || 'sinfecha') + '_' + iniciales($('operador').value) +
+            '_n' + a.length + '.xml', 'application/xml');
+    });
+    $('exportRespaldo').addEventListener('click', function () {
+        var a = registros();
+        if (!a.length) { avisar('No hay diarios guardados en este dispositivo.', 'msg-am'); return; }
+        descargar(JSON.stringify({ instrumento: VERSION, exportadoEn: new Date().toISOString(), registros: a }, null, 2),
+            'respaldo_diarios_n' + a.length + '.json', 'application/json');
+    });
+
+    /* ---------- importar respaldo ---------- */
+    $('importarBtn').addEventListener('click', function () { $('importarArchivo').click(); });
+    $('importarArchivo').addEventListener('change', function (ev) {
+        var archivo = ev.target.files && ev.target.files[0];
+        if (!archivo) return;
+        var lector = new FileReader();
+        lector.onload = function () {
+            var entrantes;
+            try {
+                var d = JSON.parse(lector.result);
+                entrantes = Array.isArray(d) ? d : d.registros;
+                if (!Array.isArray(entrantes)) throw new Error('formato');
+            } catch (e) { avisar('El archivo no tiene el formato de respaldo esperado.', 'msg-ro'); return; }
+            var actuales = registros(), usados = {};
+            actuales.forEach(function (r) { usados[r.folio] = true; });
+            var nuevos = entrantes.filter(function (r) { return r && r.folio && !usados[r.folio]; });
+            guardarRegistros(actuales.concat(nuevos));
+            refrescarRegistros();
+            avisar('Importación terminada: ' + nuevos.length + ' diarios nuevos, ' +
+                (entrantes.length - nuevos.length) + ' omitidos por folio repetido.', 'msg-az');
+        };
+        lector.readAsText(archivo, 'utf-8');
+        ev.target.value = '';
+    });
+
+    /* ---------- panel de registros ---------- */
+    function refrescarRegistros() {
+        var a = registros();
+        $('contadorRegs').textContent = String(a.length);
+        if (!a.length) {
+            $('tablaRegistros').innerHTML = '<div class="hint">Todavía no hay diarios guardados en este dispositivo.</div>';
+            return;
+        }
+        $('tablaRegistros').innerHTML =
+            '<table class="regs"><thead><tr><th>Folio</th><th>Sesión</th><th>Operador</th><th></th></tr></thead><tbody>' +
+            a.map(function (r, i) {
+                return '<tr><td>' + (r.folio || '') + '</td><td>' + (r.tipoSesion || '') + ' · ' + (r.actividad || '') +
+                    '</td><td>' + (r.operador || '') + '</td><td>' +
+                    '<button type="button" class="btn btn-mini" data-abrir="' + i + '">Abrir</button> ' +
+                    '<button type="button" class="btn btn-mini btn-danger" data-borrar="' + i + '">Borrar</button></td></tr>';
+            }).join('') + '</tbody></table>';
+    }
+    $('tablaRegistros').addEventListener('click', function (ev) {
+        var b = ev.target.closest('button');
+        if (!b) return;
+        var a = registros();
+        if (b.hasAttribute('data-abrir')) {
+            var i = Number(b.getAttribute('data-abrir'));
+            if (!a[i]) return;
+            if (!confirm('Se cargará el diario ' + a[i].folio + ' y se reemplazará lo que haya escrito ahora. ¿Continuar?')) return;
+            aplicarRegistro(a[i]);
+            $('folio').value = a[i].folio;
+            $('folioPill').textContent = a[i].folio;
+            avisar('Diario ' + a[i].folio + ' cargado. Si lo guarda otra vez se creará un folio nuevo; borre el anterior si era una corrección.', 'msg-am');
+        }
+        if (b.hasAttribute('data-borrar')) {
+            var j = Number(b.getAttribute('data-borrar'));
+            if (!a[j]) return;
+            if (!confirm('¿Borrar definitivamente el diario ' + a[j].folio + '?')) return;
+            a.splice(j, 1);
+            guardarRegistros(a);
+            refrescarRegistros();
+        }
+    });
+    $('verRegistros').addEventListener('click', function () {
+        var p = $('panelRegistros');
+        p.classList.toggle('oculto');
+        this.textContent = p.classList.contains('oculto') ? 'Ver' : 'Ocultar';
+        if (!p.classList.contains('oculto')) refrescarRegistros();
+    });
+    $('borrarTodos').addEventListener('click', function () {
+        var a = registros();
+        if (!a.length) return;
+        if (!confirm('Se borrarán los ' + a.length + ' diarios de este dispositivo.\n\n¿Ya exportó el CSV o el respaldo?')) return;
+        if (!confirm('Confirme una segunda vez: se perderán ' + a.length + ' diarios.')) return;
+        guardarRegistros([]);
+        refrescarRegistros();
+        avisar('Diarios borrados de este dispositivo.', 'msg-am');
+    });
+
+    /* ---------- limpiar (comportamiento original + folio) ---------- */
+    function hoyISO() {
+        var h = new Date();
+        return h.getFullYear() + '-' + String(h.getMonth() + 1).padStart(2, '0') + '-' + String(h.getDate()).padStart(2, '0');
+    }
+    function limpiarFormulario(conservarCabecera) {
+        var fecha = $('fecha').value, operador = $('operador').value;
+        form.querySelectorAll('input, textarea, select').forEach(function (el) {
+            if (el.type === 'radio' || el.type === 'checkbox') return;
+            if (el.readOnly) return;
+            if (el.tagName === 'SELECT') { el.selectedIndex = 0; return; }
+            if (el.type === 'number') { el.value = ''; return; }
+            if (el.type === 'date') return;
+            el.value = '';
+        });
+        // ningún campo de medición se precarga: todo vuelve a «sin registro»
+        document.querySelectorAll('input[type="radio"]').forEach(function (r) {
+            r.checked = (r.value === '');
+        });
+        ['materiales', 'productos', 'calidadProductos', 'climaEmocionalSens',
+         'climaEmocionalInt', 'escalaTension', 'cumplimiento'].forEach(function (id) {
+            $(id).value = '';
+        });
+        Array.prototype.forEach.call($('operadoresPresentes').options, function (o) { o.selected = false; });
+        actualizarContadorOperadores();
+        $('actividad').value = 'acercamiento';
+        $('modulo').value = 'sensibilizacion';
+        $('tipoSesion').value = 'sensibilizacion';
+        $('fecha').value = conservarCabecera ? (fecha || hoyISO()) : hoyISO();
+        $('operador').value = conservarCabecera ? operador : '';
+        $('copiaWrap').classList.add('oculto');
+        $('fecha').classList.remove('faltante');
+        $('operador').classList.remove('faltante');
+        toggleSesion();
+        calcularRetencion();
+        actualizarFolio();
+        try { localStorage.removeItem(K_BORRADOR); } catch (e) {}
+        sucio = false;
+        $('txtEstado').textContent = 'Borrador sin cambios';
+        $('dotEstado').className = 'dot';
+    }
+    $('limpiar').addEventListener('click', function () {
+        if (!confirm('Se borrará lo escrito en el formulario.\n\nLos diarios ya guardados no se ven afectados.\n\n¿Continuar?')) return;
+        limpiarFormulario(false);
+    });
+
+    /* ---------- ejemplos (los del instrumento original) ---------- */
+    $('rellenarEjemplo').addEventListener('click', function () {
+        $('tipoSesion').value = 'sensibilizacion';
+        toggleSesion();
+        $('fecha').value = hoyISO();
+        $('horaInicio').value = '14:00';
+        $('horaTermino').value = '16:00';
+        $('operador').value = 'Alexia Ramírez';
+        ['Alexia', 'Osiris'].forEach(function (n) {
+            var o = $('operadoresPresentes').querySelector('option[value="' + n + '"]'); if (o) o.selected = true;
+        });
+        actualizarContadorOperadores();
+        $('actividad').value = 'acercamiento';
+        $('modulo').value = 'sensibilizacion';
+        $('contactos').value = '18';
+        $('interesados').value = '7';
+        $('barreras').value = 'Falta de tiempo (5), desconfianza (2)';
+        $('materialEntregado').value = '12';
+        $('obsAcercamiento').value = 'El juego de presentación con Jenga funcionó muy bien. Las personas se mostraron curiosas por el taller de fotografía.';
+        $('materiales').value = 'si';
+        form.querySelector('input[name="espacio"][value="si"]').checked = true;
+        form.querySelector('input[name="interferencia"][value="no"]').checked = true;
+        form.querySelector('input[name="seguridad"][value="no"]').checked = true;
+        $('observacionEspacio').value = 'Espacio libre, pero algo de ruido.';
+        $('escalaTension').value = '2';
+        form.querySelector('input[name="freq_dialogo"][value="4-6"]').checked = true;
+        form.querySelector('input[name="freq_curiosidad"][value="4-6"]').checked = true;
+        form.querySelector('input[name="freq_barreras"][value="1-3"]').checked = true;
+        $('citaBarreras').value = '"No sé si mi mamá me deje venir, pero quiero intentarlo"';
+        form.querySelector('input[name="freq_interes"][value="4-6"]').checked = true;
+        $('citaInteres').value = '"Me encanta la idea de la exposición de fotos"';
+        $('climaEmocionalSens').value = '4';
+        $('relatoDia').value = 'Primer acercamiento exitoso. Logramos captar la atención de varias personas que no conocían el proyecto. Se mostraron participativas.';
+        $('cumplimiento').value = 'si';
+        $('ajuste').value = 'Llevar más material visual para la próxima.';
+        actualizarFolio();
+        marcarSucio();
+    });
+
+    $('rellenarEjemploInt').addEventListener('click', function () {
+        $('tipoSesion').value = 'intervencion';
+        toggleSesion();
+        $('fecha').value = hoyISO();
+        $('horaInicio').value = '14:00';
+        $('horaTermino').value = '16:30';
+        $('operador').value = 'Alexia Ramírez';
+        Array.prototype.forEach.call($('operadoresPresentes').options, function (o) { o.selected = false; });
+        ['Alexia', 'Montserrat', 'Josafat'].forEach(function (n) {
+            var o = $('operadoresPresentes').querySelector('option[value="' + n + '"]'); if (o) o.selected = true;
+        });
+        actualizarContadorOperadores();
+        $('actividad').value = 'taller_fotografia';
+        $('modulo').value = 'comp2';
+        $('inscritos').value = '12';
+        $('asistentes').value = '9';
+        $('nuevos').value = '2';
+        $('reincidentes').value = '7';
+        calcularRetencion();
+        $('productos').value = 'si';
+        $('cantidadProductos').value = '5';
+        $('calidadProductos').value = 'alto';
+        $('tipoProducto').value = 'Fotografías impresas, bocetos';
+        $('materiales').value = 'si';
+        form.querySelector('input[name="espacio"][value="si"]').checked = true;
+        form.querySelector('input[name="interferencia"][value="no"]').checked = true;
+        form.querySelector('input[name="seguridad"][value="no"]').checked = true;
+        $('observacionEspacio').value = 'Espacio disponible, buena luz.';
+        $('escalaTension').value = '2';
+        form.querySelector('input[name="freq_develamiento"][value="1-3"]').checked = true;
+        $('citaDevelamiento').value = '"Esto es violencia, porque no me dejan ser quien soy"';
+        form.querySelector('input[name="freq_desnaturalizacion"][value="1-3"]').checked = true;
+        $('citaDesnaturalizacion').value = '"Ya no creo que sea normal que mi papá me golpee"';
+        form.querySelector('input[name="freq_agencia"][value="4-6"]').checked = true;
+        $('citaAgencia').value = '"Voy a buscar una beca para la universidad"';
+        form.querySelector('input[name="freq_apoyo"][value="1-3"]').checked = true;
+        $('citaApoyo').value = 'Ayudó a otro con el encuadre.';
+        form.querySelector('input[name="freq_conflicto"][value="0"]').checked = true;
+        $('climaEmocionalInt').value = '4';
+        $('relatoDia').value = 'Sesión productiva. Mostraron gran interés en la técnica y compartieron historias personales.';
+        $('cumplimiento').value = 'si';
+        $('ajuste').value = 'Traer más cámaras.';
+        actualizarFolio();
+        marcarSucio();
+    });
+
+    /* ---------- arranque ---------- */
+    (function iniciar() {
+        $('fecha').value = hoyISO();
+        try {
+            var op = localStorage.getItem(K_OPERADOR);
+            if (op) $('operador').value = op;
+        } catch (e) {}
+        toggleSesion();
+        calcularRetencion();
+        actualizarContadorOperadores();
+        refrescarRegistros();
+        actualizarFolio();
+
+        if (!almacenOk) {
+            var m = $('msgGeneral');
+            m.className = 'msg show msg-ro';
+            m.textContent = 'Este navegador no permite guardar datos localmente (¿modo privado?). El diario NO se guardará solo: exporte cada registro apenas lo termine.';
+            return;
+        }
+        var crudo = null;
+        try { crudo = localStorage.getItem(K_BORRADOR); } catch (e) {}
+        if (!crudo) return;
+        try {
+            var b = JSON.parse(crudo);
+            var contenido = (b.relatoDia && b.relatoDia.length > 3) ||
+                (b.obsAcercamiento && b.obsAcercamiento.length > 3) ||
+                (b.incidenteCritico && b.incidenteCritico.length > 3) ||
+                (b.citaDevelamiento || b.citaInteres || b.citaAgencia || b.citaBarreras);
+            if (!contenido) { localStorage.removeItem(K_BORRADOR); return; }
+            $('borradorInfo').textContent = (b.fecha || 'sin fecha') + (b.operador ? ' · ' + b.operador : '');
+            $('msgBorrador').classList.add('show');
+            $('recuperarBorrador').addEventListener('click', function () {
+                aplicarRegistro(b);
+                $('msgBorrador').classList.remove('show');
+                avisar('Borrador recuperado. Revise que esté completo antes de guardarlo.', 'msg-az');
+            });
+            $('descartarBorrador').addEventListener('click', function () {
+                if (!confirm('Se descartará el diario sin terminar. ¿Continuar?')) return;
+                try { localStorage.removeItem(K_BORRADOR); } catch (e) {}
+                $('msgBorrador').classList.remove('show');
+            });
+        } catch (e) {}
+    })();
+
+})();
+
+/* ==================================================================
+   Capa de aplicación web: instalación, trabajo sin conexión y avisos
+   de versión nueva. No toca los datos: los diarios siguen viviendo
+   en el almacenamiento local del propio dispositivo.
+   ================================================================== */
+(function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+
+    /* ---- estado de la conexión ---- */
+    function pintarRed() {
+        var c = $('chipRed');
+        if (!c) return;
+        if (navigator.onLine) { c.className = 'chip-red online'; c.textContent = 'En línea'; }
+        else { c.className = 'chip-red offline'; c.textContent = 'Sin conexión · el diario sigue funcionando'; }
+    }
+    window.addEventListener('online', pintarRed);
+    window.addEventListener('offline', pintarRed);
+    pintarRed();
+
+    /* ---- service worker ---- */
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('./sw.js').then(function (reg) {
+                function vigilar(sw) {
+                    if (!sw) return;
+                    sw.addEventListener('statechange', function () {
+                        if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+                            $('barraActualizar').classList.add('show');
+                        }
+                    });
+                }
+                if (reg.waiting && navigator.serviceWorker.controller) {
+                    $('barraActualizar').classList.add('show');
+                }
+                vigilar(reg.installing);
+                reg.addEventListener('updatefound', function () { vigilar(reg.installing); });
+
+                $('btnActualizar').addEventListener('click', function () {
+                    var esperando = reg.waiting || reg.installing;
+                    if (esperando) esperando.postMessage('ACTIVAR_YA');
+                    setTimeout(function () { location.reload(); }, 400);
+                });
+            }).catch(function () { /* sin service worker el diario funciona igual, solo sin modo offline */ });
+
+            var recargando = false;
+            navigator.serviceWorker.addEventListener('controllerchange', function () {
+                if (recargando) return;
+                recargando = true;
+                location.reload();
+            });
+        });
+    }
+
+    /* ---- instalación en la pantalla de inicio ---- */
+    var promptDiferido = null;
+    var YA_NO = 'dc_no_instalar_v24';
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        promptDiferido = e;
+        try { if (localStorage.getItem(YA_NO)) return; } catch (err) {}
+        $('barraInstalar').classList.add('show');
+    });
+    $('btnInstalar').addEventListener('click', function () {
+        $('barraInstalar').classList.remove('show');
+        if (!promptDiferido) return;
+        promptDiferido.prompt();
+        promptDiferido.userChoice.then(function () { promptDiferido = null; });
+    });
+    $('btnInstalarNo').addEventListener('click', function () {
+        $('barraInstalar').classList.remove('show');
+        try { localStorage.setItem(YA_NO, '1'); } catch (err) {}
+    });
+    window.addEventListener('appinstalled', function () {
+        $('barraInstalar').classList.remove('show');
+    });
+})();
+</script>
+
+
+</body>
+</html>
