@@ -336,8 +336,14 @@
         table.regs th { background: #33392f; color: #fff; font-weight: 600; }
         table.regs tr:nth-child(even) td { background: #f3f2ee; }
         .oculto { display: none !important; }
-        select[multiple] { height: auto; min-height: 168px; padding: 4px; background-image: none; }
-        select[multiple] option { padding: 8px 6px; border-radius: 3px; }
+        .ops-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 6px; margin-top: 4px; }
+        .ops-grid label { display: flex; align-items: center; gap: 7px; margin: 0; padding: 8px 10px;
+            border: 1px solid #c9c7bf; border-radius: 6px; background: #fff; cursor: pointer;
+            font-weight: 500; font-size: 0.85rem; min-height: 44px; user-select: none; }
+        .ops-grid label:hover { background: #f4f3ee; }
+        .ops-grid input { width: 20px; height: 20px; min-width: 20px; margin: 0; cursor: pointer; }
+        .ops-grid input:checked + span { font-weight: 700; }
+        .ops-grid label:has(input:checked) { background: #eef2ea; border-color: #3f7a5c; }
         .chip-red { font-size: 0.68rem; font-weight: 600; padding: 3px 9px; border-radius: 12px; }
         .chip-red.online { background: #e3ecdf; color: #2f5f47; }
         .chip-red.offline { background: #fdf6e3; color: #6b5518; }
@@ -358,7 +364,7 @@
         <div>
             <h1>Diario de Campo <small>Clínica Comunitaria Ágora · Fase de Sensibilización / Intervención</small></h1>
         </div>
-        <div class="version">v2.4 · MML vinculante</div>
+        <div class="version">v2.5 · MML vinculante</div>
     </header>
 
     <!-- Capa de aplicación -->
@@ -437,20 +443,22 @@
                     <input type="text" id="operador" placeholder="Tu nombre">
                     <div class="hint">De aquí se toman las iniciales del folio.</div>
                 </div>
-                <div class="col">
+                </div>
+            <div class="row">
+                <div class="col-full">
                     <label for="operadoresPresentes">Operadores presentes en la jornada</label>
-                    <select id="operadoresPresentes" multiple size="9">
-                        <option value="Alexia">Alexia</option>
-                        <option value="Aziel">Aziel</option>
-                        <option value="Belen">Belén</option>
-                        <option value="Josafat">Josafat</option>
-                        <option value="Luis">Luis</option>
-                        <option value="Osiris">Osiris</option>
-                        <option value="Mariana">Mariana</option>
-                        <option value="Montserrat">Montserrat</option>
-                        <option value="Valeria">Valeria</option>
-                    </select>
-                    <div class="hint">Toque o haga clic para marcar varios. En el celular se marcan tocando cada nombre.</div>
+                    <div class="ops-grid" id="operadoresPresentes">
+                        <label><input type="checkbox" name="opPresente" value="Alexia"><span>Alexia</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Aziel"><span>Aziel</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Belen"><span>Belén</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Josafat"><span>Josafat</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Luis"><span>Luis</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Osiris"><span>Osiris</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Mariana"><span>Mariana</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Montserrat"><span>Montserrat</span></label>
+                        <label><input type="checkbox" name="opPresente" value="Valeria"><span>Valeria</span></label>
+                    </div>
+                    <div class="hint">Marca a quienes estuvieron en la jornada.</div>
                     <div class="contador-op" id="contadorOperadores">Ninguno seleccionado</div>
                 </div>
             </div>
@@ -472,6 +480,7 @@
                         <option value="taller_cocina">Taller Cocina</option>
                         <option value="taller_fotografia">Taller Fotografía</option>
                         <option value="grupo_padres">Grupo de Padres</option>
+                        <option value="taller_relaciones">Taller Relaciones libres de violencia</option>
                         <option value="otro">Otro</option>
                     </select>
                 </div>
@@ -482,14 +491,16 @@
                         <option value="comp1">Componente 1: Empleabilidad</option>
                         <option value="comp2">Componente 2: Simbolización</option>
                         <option value="comp3">Componente 3: Familias</option>
+                        <option value="comp4">Componente 4: Relaciones libres de violencia</option>
                     </select>
                 </div>
             </div>
         </fieldset>
 
         <div class="hint" style="margin:-8px 0 16px; padding:8px 10px; background:#f7f6f2; border:1px solid #e2e0da; border-radius:6px;">
-            <strong>s/r = sin registro.</strong> Ningún campo viene precargado a propósito: dejar algo en «s/r» significa
-            que no se observó, no que haya ocurrido cero veces. Al guardar, el diario avisa qué quedó sin llenar.
+            <strong>Ningún campo viene precargado a propósito.</strong> Lo que quede sin marcar se guarda como
+            «sin registro», que no es lo mismo que cero: cero significa que se buscó y no ocurrió. Al guardar,
+            el diario avisa qué quedó pendiente.
         </div>
 
         <!-- SECCIÓN A: COBERTURA (DINÁMICA) -->
@@ -585,7 +596,6 @@
                 <div class="col">
                     <label>Espacio físico: ¿se usó el espacio planificado?</label>
                     <div class="inline-group">
-                        <label><input type="radio" name="espacio" value="" checked> s/r</label>
                         <label><input type="radio" name="espacio" value="si"> Sí</label>
                         <label><input type="radio" name="espacio" value="no"> No, se improvisó</label>
                     </div>
@@ -602,7 +612,6 @@
                 <div class="col">
                     <label>Interferencia institucional: ¿hubo eventos no comunicados?</label>
                     <div class="inline-group">
-                        <label><input type="radio" name="interferencia" value="" checked> s/r</label>
                         <label><input type="radio" name="interferencia" value="si"> Sí</label>
                         <label><input type="radio" name="interferencia" value="no"> No</label>
                     </div>
@@ -610,7 +619,6 @@
                 <div class="col">
                     <label>Seguridad: ¿se percibió hostilidad o riesgo?</label>
                     <div class="inline-group">
-                        <label><input type="radio" name="seguridad" value="" checked> s/r</label>
                         <label><input type="radio" name="seguridad" value="si"> Sí</label>
                         <label><input type="radio" name="seguridad" value="no"> No</label>
                     </div>
@@ -644,7 +652,6 @@
                     <div class="col">
                         <label>Disposición al diálogo: ¿Las personas se mostraron abiertas a conversar?</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_dialogo" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_dialogo" value="0"> 0 (Nada)</label>
                             <label><input type="radio" name="freq_dialogo" value="1-3"> 1-3 (Poco)</label>
                             <label><input type="radio" name="freq_dialogo" value="4-6"> 4-6 (Moderado)</label>
@@ -654,7 +661,6 @@
                     <div class="col">
                         <label>Curiosidad por el proyecto: ¿Preguntaron sobre las actividades futuras?</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_curiosidad" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_curiosidad" value="0"> 0</label>
                             <label><input type="radio" name="freq_curiosidad" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_curiosidad" value="4-6"> 4-6</label>
@@ -666,7 +672,6 @@
                     <div class="col">
                         <label>Barreras de participación: ¿Mencionaron obstáculos (tiempo, permisos, etc.)?</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_barreras" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_barreras" value="0"> 0</label>
                             <label><input type="radio" name="freq_barreras" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_barreras" value="4-6"> 4-6</label>
@@ -677,7 +682,6 @@
                     <div class="col">
                         <label>Interés expresado: Frases como "me gustaría", "quiero participar"</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_interes" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_interes" value="0"> 0</label>
                             <label><input type="radio" name="freq_interes" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_interes" value="4-6"> 4-6</label>
@@ -706,7 +710,6 @@
                     <div class="col">
                         <label>Identificación de violencias (Develamiento)</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_develamiento" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_develamiento" value="0"> 0</label>
                             <label><input type="radio" name="freq_develamiento" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_develamiento" value="4-6"> 4-6</label>
@@ -717,7 +720,6 @@
                     <div class="col">
                         <label>Cuestionamiento de mandatos (Desnaturalización)</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_desnaturalizacion" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_desnaturalizacion" value="0"> 0</label>
                             <label><input type="radio" name="freq_desnaturalizacion" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_desnaturalizacion" value="4-6"> 4-6</label>
@@ -730,7 +732,6 @@
                     <div class="col">
                         <label>Expresión de Agencia (Subjetivación)</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_agencia" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_agencia" value="0"> 0</label>
                             <label><input type="radio" name="freq_agencia" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_agencia" value="4-6"> 4-6</label>
@@ -741,7 +742,6 @@
                     <div class="col">
                         <label>Conductas de apoyo (Vínculo)</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_apoyo" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_apoyo" value="0"> 0</label>
                             <label><input type="radio" name="freq_apoyo" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_apoyo" value="4-6"> 4-6</label>
@@ -754,7 +754,6 @@
                     <div class="col">
                         <label>Conflicto manifiesto (Riesgo)</label>
                         <div class="freq-group">
-                            <label><input type="radio" name="freq_conflicto" value="" checked> s/r</label>
                             <label><input type="radio" name="freq_conflicto" value="0"> 0</label>
                             <label><input type="radio" name="freq_conflicto" value="1-3"> 1-3</label>
                             <label><input type="radio" name="freq_conflicto" value="4-6"> 4-6</label>
@@ -792,7 +791,6 @@
                 <div class="col">
                     <label>¿Se observó algún cambio en la percepción de los padres?</label>
                     <div class="inline-group">
-                        <label><input type="radio" name="cambioPadres" value="" checked> s/r</label>
                         <label><input type="radio" name="cambioPadres" value="si"> Sí</label>
                         <label><input type="radio" name="cambioPadres" value="no"> No</label>
                     </div>
@@ -862,7 +860,7 @@
     </form>
 
     <div class="footer">
-        Diario de campo adaptable · Clínica Comunitaria Ágora · v2.4 · los datos se guardan en este dispositivo
+        Diario de campo adaptable · Clínica Comunitaria Ágora · v2.5 · los datos se guardan en este dispositivo
     </div>
 </div>
 
@@ -880,7 +878,7 @@
          · exportación de uno o de todos, con respaldo e importación
        ================================================================== */
 
-    var VERSION = '2.4';
+    var VERSION = '2.5';
     var K_BORRADOR = 'dc_borrador_v23';
     var K_REGISTROS = 'dc_registros_v23';
     var K_OPERADOR = 'dc_operador_v23';
@@ -895,7 +893,7 @@
        correspondía a ese tipo de sesión.                                   */
     var ESQUEMA = [
         { k: 'folio' }, { k: 'fecha' }, { k: 'horaInicio' }, { k: 'horaTermino' },
-        { k: 'operador' }, { k: 'operadoresPresentes', t: 'multi' }, { k: 'tipoSesion' }, { k: 'actividad' }, { k: 'modulo' },
+        { k: 'operador' }, { k: 'operadoresPresentes', t: 'checks' }, { k: 'tipoSesion' }, { k: 'actividad' }, { k: 'modulo' },
 
         { k: 'contactos', bloque: 'sens' },
         { k: 'interesados', bloque: 'sens' },
@@ -957,10 +955,9 @@
     var DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
     function leer(c) {
-        if (c.t === 'multi') {
-            var sel = $(c.k);
-            if (!sel) return '';
-            return Array.prototype.slice.call(sel.selectedOptions).map(function (o) { return o.value; }).join('|');
+        if (c.t === 'checks') {
+            return Array.prototype.slice.call(form.querySelectorAll('input[name="opPresente"]:checked'))
+                .map(function (x) { return x.value; }).join('|');
         }
         if (c.t === 'radio') {
             var r = form.querySelector('input[name="' + c.k + '"]:checked');
@@ -971,11 +968,10 @@
     }
     function escribir(c, v) {
         v = (v === undefined || v === null) ? '' : String(v);
-        if (c.t === 'multi') {
-            var sel = $(c.k);
-            if (!sel) return;
+        if (c.t === 'checks') {
             var vals = v ? v.split('|') : [];
-            Array.prototype.forEach.call(sel.options, function (o) { o.selected = vals.indexOf(o.value) !== -1; });
+            Array.prototype.forEach.call(form.querySelectorAll('input[name="opPresente"]'),
+                function (x) { x.checked = vals.indexOf(x.value) !== -1; });
             actualizarContadorOperadores();
             return;
         }
@@ -1012,7 +1008,7 @@
             guardadoEn: new Date().toISOString(),
             diaSemana: diaSemana($('fecha').value),
             duracionMin: duracion($('horaInicio').value, $('horaTermino').value),
-            nOperadores: String($('operadoresPresentes').selectedOptions.length || '')
+            nOperadores: String(operadoresMarcados().length || '')
         };
         ESQUEMA.forEach(function (c) {
             var aplica = true;
@@ -1033,11 +1029,13 @@
         actualizarFolio();
     }
 
+    function operadoresMarcados() {
+        return Array.prototype.slice.call(form.querySelectorAll('input[name="opPresente"]:checked'));
+    }
     function actualizarContadorOperadores() {
-        var sel = $('operadoresPresentes');
-        if (!sel) return;
-        var n = sel.selectedOptions.length;
-        var nombres = Array.prototype.slice.call(sel.selectedOptions).map(function (o) { return o.text; });
+        var marcados = operadoresMarcados();
+        var n = marcados.length;
+        var nombres = marcados.map(function (x) { return x.parentNode.textContent.trim(); });
         $('contadorOperadores').textContent = n === 0 ? 'Ninguno seleccionado'
             : (n + (n === 1 ? ' operador: ' : ' operadores: ') + nombres.join(', '));
     }
@@ -1140,6 +1138,16 @@
         $('tasaRetencion').value = (ins > 0 ? Math.round((asi / ins) * 100) : 0) + '%';
     }
     $('operadoresPresentes').addEventListener('change', actualizarContadorOperadores);
+    // la actividad sugiere el módulo del marco lógico
+    var MAPA_MODULO = {
+        acercamiento: 'sensibilizacion', presentacion: 'sensibilizacion',
+        taller_cv: 'comp1', taller_cocina: 'comp1',
+        taller_fotografia: 'comp2', grupo_padres: 'comp3', taller_relaciones: 'comp4'
+    };
+    $('actividad').addEventListener('change', function () {
+        var m = MAPA_MODULO[this.value];
+        if (m) $('modulo').value = m;
+    });
     $('inscritos').addEventListener('input', calcularRetencion);
     $('asistentes').addEventListener('input', calcularRetencion);
     ['fecha', 'operador'].forEach(function (id) { $(id).addEventListener('input', actualizarFolio); });
@@ -1385,14 +1393,13 @@
             el.value = '';
         });
         // ningún campo de medición se precarga: todo vuelve a «sin registro»
-        document.querySelectorAll('input[type="radio"]').forEach(function (r) {
-            r.checked = (r.value === '');
-        });
+        document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.checked = false; });
         ['materiales', 'productos', 'calidadProductos', 'climaEmocionalSens',
          'climaEmocionalInt', 'escalaTension', 'cumplimiento'].forEach(function (id) {
             $(id).value = '';
         });
-        Array.prototype.forEach.call($('operadoresPresentes').options, function (o) { o.selected = false; });
+        Array.prototype.forEach.call(form.querySelectorAll('input[name="opPresente"]'),
+            function (x) { x.checked = false; });
         actualizarContadorOperadores();
         $('actividad').value = 'acercamiento';
         $('modulo').value = 'sensibilizacion';
@@ -1424,7 +1431,7 @@
         $('horaTermino').value = '16:00';
         $('operador').value = 'Alexia Ramírez';
         ['Alexia', 'Osiris'].forEach(function (n) {
-            var o = $('operadoresPresentes').querySelector('option[value="' + n + '"]'); if (o) o.selected = true;
+            var c = form.querySelector('input[name="opPresente"][value="' + n + '"]'); if (c) c.checked = true;
         });
         actualizarContadorOperadores();
         $('actividad').value = 'acercamiento';
@@ -1461,9 +1468,10 @@
         $('horaInicio').value = '14:00';
         $('horaTermino').value = '16:30';
         $('operador').value = 'Alexia Ramírez';
-        Array.prototype.forEach.call($('operadoresPresentes').options, function (o) { o.selected = false; });
+        Array.prototype.forEach.call(form.querySelectorAll('input[name="opPresente"]'),
+            function (x) { x.checked = false; });
         ['Alexia', 'Montserrat', 'Josafat'].forEach(function (n) {
-            var o = $('operadoresPresentes').querySelector('option[value="' + n + '"]'); if (o) o.selected = true;
+            var c = form.querySelector('input[name="opPresente"][value="' + n + '"]'); if (c) c.checked = true;
         });
         actualizarContadorOperadores();
         $('actividad').value = 'taller_fotografia';
